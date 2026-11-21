@@ -1,0 +1,3105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أُفُق | المنصة التعليمية الذكية</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Cairo & IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['IBM Plex Sans Arabic', 'Cairo', 'sans-serif'],
+            display: ['Cairo', 'IBM Plex Sans Arabic', 'sans-serif'],
+          },
+          colors: {
+            apple: {
+              bg: '#F5F5F7',
+              card: '#FFFFFF',
+              text: '#1D1D1F',
+              muted: '#6E6E73',
+              blue: '#0071E3',
+              blueHover: '#0077ED',
+              green: '#34C759',
+              orange: '#FF9500',
+              red: '#FF3B30',
+              purple: '#AF52DE',
+              border: 'rgba(0, 0, 0, 0.08)'
+            }
+          },
+          boxShadow: {
+            'apple': '0 4px 24px rgba(0, 0, 0, 0.04)',
+            'apple-hover': '0 10px 32px rgba(0, 0, 0, 0.08)',
+            'apple-modal': '0 24px 60px rgba(0, 0, 0, 0.16)',
+          },
+          borderRadius: {
+            'apple': '20px',
+            'apple-sm': '14px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #F5F5F7;
+      color: #1D1D1F;
+      font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+    }
+
+    /* Frosted Glass Apple Navigation */
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .glass-dark {
+      background: rgba(29, 29, 31, 0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    /* Apple Card Style */
+    .apple-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .apple-card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Apple Segmented Control */
+    .segmented-bg {
+      background-color: #E8E8ED;
+      padding: 4px;
+      border-radius: 14px;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.16);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    /* Smooth Fade Animation */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-view {
+      animation: fadeSlideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Protected Video Watermark Float */
+    @keyframes watermarkDrift {
+      0% { top: 14%; right: 10%; }
+      25% { top: 70%; right: 15%; }
+      50% { top: 65%; right: 65%; }
+      75% { top: 18%; right: 60%; }
+      100% { top: 14%; right: 10%; }
+    }
+
+    .video-watermark {
+      animation: watermarkDrift 28s infinite ease-in-out;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Custom Range Slider */
+    input[type="range"].apple-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"].apple-slider::-webkit-slider-runnable-track {
+      height: 5px;
+      border-radius: 999px;
+    }
+    input[type="range"].apple-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      margin-top: -4.5px;
+      transition: transform 0.15s ease;
+    }
+    input[type="range"].apple-slider:hover::-webkit-slider-thumb {
+      transform: scale(1.2);
+    }
+
+    /* Floating Mini Player (Picture-in-Picture simulation) */
+    .pip-active {
+      position: fixed !important;
+      bottom: 24px !important;
+      left: 24px !important;
+      width: 360px !important;
+      max-width: calc(100vw - 48px) !important;
+      z-index: 90 !important;
+      border-radius: 18px !important;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35) !important;
+      border: 2px solid rgba(255,255,255,0.2) !important;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-apple-blue selection:text-white">
+
+  <!-- Quick Role Switcher & Cloud Status Top Ribbon -->
+  <div class="bg-[#1D1D1F] text-white text-xs py-2 px-4 sticky top-0 z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 text-emerald-400 font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          مزامنة سحابية نشطة (RLS محمي)
+        </span>
+        <span class="hidden sm:inline text-white/40">|</span>
+        <span class="hidden sm:inline text-white/70">التبديل السريع للمعاينة الفورية:</span>
+      </div>
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <button onclick="quickSwitchRole('admin')" id="qs-admin" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-white font-medium flex items-center gap-1">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i>
+          لوحة الإدارة
+        </button>
+        <button onclick="quickSwitchRole('teacher')" id="qs-teacher" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-white font-medium flex items-center gap-1">
+          <i data-lucide="presentation" class="w-3.5 h-3.5 text-sky-400"></i>
+          لوحة المدرس
+        </button>
+        <button onclick="quickSwitchRole('student')" id="qs-student" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-white font-medium flex items-center gap-1">
+          <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-emerald-400"></i>
+          واجهة الطالب
+        </button>
+        <button onclick="logoutUser()" class="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 transition font-medium flex items-center gap-1">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          شاشة الدخول
+        </button>
+        <button onclick="resetDemoData()" title="إعادة ضبط البيانات التجريبية" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/15 text-white/60 hover:text-white transition">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Header Navigation (Visible when logged in) -->
+  <header id="main-header" class="glass-nav sticky top-[37px] z-40 hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#0071E3] to-[#42A1EC] flex items-center justify-center text-white shadow-sm">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="font-display font-extrabold text-xl tracking-tight text-[#1D1D1F]">أُفُق</span>
+          <span id="header-role-badge" class="mr-2 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0071E3]"></span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex flex-col text-left">
+          <span id="header-user-name" class="text-sm font-semibold text-[#1D1D1F]"></span>
+          <span id="header-user-email" class="text-xs text-[#6E6E73]"></span>
+        </div>
+        <div id="header-user-avatar" class="w-9 h-9 rounded-full bg-[#1D1D1F] text-white flex items-center justify-center font-bold text-sm"></div>
+        <button onclick="logoutUser()" class="p-2.5 rounded-xl hover:bg-black/5 text-[#6E6E73] hover:text-rose-600 transition" title="تسجيل الخروج">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main id="app-container" class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 min-h-[calc(100vh-110px)]">
+    <!-- Dynamic Views Injected Here -->
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 left-5 z-[100] flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
+
+  <!-- Global Modal Container -->
+  <div id="modal-backdrop" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[80] hidden items-center justify-center p-4 overflow-y-auto">
+    <div id="modal-box" class="bg-white rounded-[24px] shadow-apple-modal border border-black/5 w-full max-w-2xl overflow-hidden animate-view my-auto">
+      <!-- Dynamic Modal Content -->
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. STATE & SEED DATA (Cloud Database & RLS Simulation in LocalStorage)
+    // =========================================================================
+    const STORAGE_KEY = 'ofoq_lms_db_v1';
+
+    // Sample HTML5 Public Domain / Reliable MP4 Video Streams for Built-in Player
+    const SAMPLE_VIDEOS = [
+      {
+        title: 'مقدمة في هندسة البرمجيات وتصميم الأنظمة',
+        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+      },
+      {
+        title: 'أساسيات الخوارزميات وهياكل البيانات المتقدمة',
+        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+      },
+      {
+        title: 'تطبيقات الذكاء الاصطناعي وتعلم الآلة',
+        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'
+      }
+    ];
+
+    const initialSeedData = {
+      users: [
+        {
+          id: 'u-admin-1',
+          name: 'م. طارق المنصور',
+          email: 'admin@ofoq.edu',
+          password: '123',
+          role: 'admin',
+          verified: true,
+          status: 'active',
+          permissions: { all: true }
+        },
+        {
+          id: 'u-teacher-1',
+          name: 'د. سارة العتيبي',
+          email: 'sara@ofoq.edu',
+          password: '123',
+          role: 'teacher',
+          verified: true,
+          status: 'active',
+          specialty: 'علوم الحاسب والذكاء الاصطناعي',
+          permissions: {
+            canCreateCourse: true,
+            canEditLectures: true,
+            canManageExams: true
+          }
+        },
+        {
+          id: 'u-teacher-2',
+          name: 'أ. خالد الشامسي',
+          email: 'khaled@ofoq.edu',
+          password: '123',
+          role: 'teacher',
+          verified: true,
+          status: 'active',
+          specialty: 'الرياضيات التطبيقية والفيزياء',
+          permissions: {
+            canCreateCourse: false,
+            canEditLectures: true,
+            canManageExams: true
+          }
+        },
+        {
+          id: 'u-student-1',
+          name: 'عمر عبدالعزيز',
+          email: 'omar@student.edu',
+          password: '123',
+          role: 'student',
+          verified: true,
+          status: 'active'
+        },
+        {
+          id: 'u-student-2',
+          name: 'ليلى محمود',
+          email: 'layla@student.edu',
+          password: '123',
+          role: 'student',
+          verified: true,
+          status: 'active'
+        }
+      ],
+      courses: [
+        {
+          id: 'c-101',
+          title: 'هندسة البرمجيات الحديثة وتصميم واجهات Apple',
+          description: 'دورة شاملة تأخذك من المبادئ الأساسية لتجربة المستخدم وهندسة النظم السحابية إلى بناء تطبيقات متكاملة عالية الأداء.',
+          category: 'البرمجة والتصميم',
+          teacherId: 'u-teacher-1',
+          isFree: false,
+          published: true,
+          coverGradient: 'from-[#0071E3] via-[#2997FF] to-[#5AC8FA]',
+          lectures: [
+            {
+              id: 'lec-101-1',
+              unit: 'الوحدة الأولى: الأساسيات والمعمارية',
+              title: 'مبادئ التصميم النظيف وتجربة المستخدم (UI/UX)',
+              duration: '12:45',
+              videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+              notes: 'نستعرض في هذه المحاضرة فلسفة التصميم البسيط، التباين اللوني، التسلسل البصري، وكيفية بناء واجهات مستخدم مريحة وسريعة الاستجابة.',
+              pdfName: 'ملخص_مبادئ_التصميم_الحديث.pdf',
+              pdfUrl: '#pdf-design-principles',
+              chapters: [
+                { time: 0, title: 'مقدمة المحاضرة وأهدافها' },
+                { time: 18, title: 'التسلسل البصري والخطوط العربية' },
+                { time: 38, title: 'نظام البطاقات والزجاج الضبابي' }
+              ],
+              moments: [
+                { time: 12, label: 'قاعدة الـ 60-30-10 للألوان' },
+                { time: 30, label: 'أهمية الهوامش والمساحات البيضاء' }
+              ],
+              exam: {
+                id: 'ex-101-1',
+                title: 'اختبار المحاضرة الأولى: أساسيات UI/UX',
+                passScore: 70,
+                requirePassToUnlockNext: true,
+                questions: [
+                  {
+                    id: 'q1',
+                    type: 'mcq',
+                    text: 'ما الهدف الأساسي من استخدام المساحات البيضاء (Whitespace) في التصميم الحديث؟',
+                    options: [
+                      'تحسين القراءة وتقليل التشتت البصري للمستخدم',
+                      'زيادة حجم الملفات البرمجية',
+                      'إخفاء الأزرار الرئيسية عن المستخدم',
+                      'تقليل سرعة تحميل الصفحة'
+                    ],
+                    correctIndex: 0
+                  },
+                  {
+                    id: 'q2',
+                    type: 'mcq',
+                    text: 'أي من الألوان التالية يُستخدم عادةً للتركيز على الإجراء الأساسي (Primary Action) في واجهات Apple؟',
+                    options: [
+                      'الأزرق التفاعلي (#0071E3)',
+                      'الرمادي الباهت جدًا',
+                      'الأصفر الفاتح',
+                      'البني الداكن'
+                    ],
+                    correctIndex: 0
+                  },
+                  {
+                    id: 'q3',
+                    type: 'essay',
+                    text: 'اشرح بإيجاز كيف يساهم التصميم المتجاوب (Responsive Design) في رفع جودة المنصات التعليمية؟'
+                  }
+                ]
+              }
+            },
+            {
+              id: 'lec-101-2',
+              unit: 'الوحدة الأولى: الأساسيات والمعمارية',
+              title: 'أمن البيانات وسياسات الوصول على مستوى الصفوف (RLS)',
+              duration: '15:20',
+              videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+              notes: 'شرح تفصيلي لكيفية عزل بيانات الطلاب والمدرسين والإدارة في قواعد البيانات السحابية ومنع الوصول غير المصرح به.',
+              pdfName: 'دليل_أمن_قواعد_البيانات_RLS.pdf',
+              pdfUrl: '#pdf-rls-security',
+              chapters: [
+                { time: 0, title: 'مفهوم عزل الصلاحيات' },
+                { time: 22, title: 'تطبيق سياسات Row-Level Security' }
+              ],
+              moments: [
+                { time: 15, label: 'الفرق بين المصادقة Authentication والتفويض Authorization' }
+              ],
+              exam: {
+                id: 'ex-101-2',
+                title: 'اختبار أمن البيانات والصلاحيات',
+                passScore: 60,
+                requirePassToUnlockNext: false,
+                questions: [
+                  {
+                    id: 'q201',
+                    type: 'mcq',
+                    text: 'ماذا تعني تقنية RLS في قواعد البيانات السحابية؟',
+                    options: [
+                      'تطبيق سياسات أمان وتحكم بالوصول على مستوى كل صف بيانات',
+                      'ضغط ملفات الفيديو تلقائيًا',
+                      'تغيير ألوان الواجهة تلقائيًا',
+                      'إرسال رسائل بريدية جماعية'
+                    ],
+                    correctIndex: 0
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          id: 'c-102',
+          title: 'مقدمة مجانية في التفكير الخوارزمي وحل المشكلات',
+          description: 'كورس تأسيسي مجاني بالكامل يساعدك على بناء عقلية برمجية منظمة وتحليل التعقيد الزمني للخوارزميات.',
+          category: 'علوم الحاسب',
+          teacherId: 'u-teacher-1',
+          isFree: true,
+          published: true,
+          coverGradient: 'from-[#34C759] via-[#30B0C7] to-[#0071E3]',
+          lectures: [
+            {
+              id: 'lec-102-1',
+              unit: 'الوحدة التمهيدية',
+              title: 'كيف يفكر المبرمج؟ تحليل المشكلة قبل كتابة الكود',
+              duration: '10:15',
+              videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+              notes: 'خطوات تقسيم المشكلات المعقدة إلى أجزاء صغيرة قابلة للحل والاختبار.',
+              pdfName: 'خريطة_التفكير_الخوارزمي.pdf',
+              pdfUrl: '#pdf-algo',
+              chapters: [
+                { time: 0, title: 'تعريف الخوارزمية' },
+                { time: 25, title: 'أمثلة عملية من الحياة اليومية' }
+              ],
+              moments: [
+                { time: 14, label: 'أهم قاعدة: لا تبدأ بالبرمجة قبل الفهم الكامل للمدخلات والمخرجات' }
+              ],
+              exam: {
+                id: 'ex-102-1',
+                title: 'اختبار التفكير الخوارزمي',
+                passScore: 50,
+                requirePassToUnlockNext: false,
+                questions: [
+                  {
+                    id: 'q301',
+                    type: 'mcq',
+                    text: 'ما هي الخطوة الأولى الصحيحة لحل أي مسألة برمجية؟',
+                    options: [
+                      'فهم المشكلة وتحديد المدخلات والمخرجات المطلوبة',
+                      'نسخ كود جاهز دون قراءته',
+                      'تجاهل الحالات الاستثنائية',
+                      'تصميم الشعار أولاً'
+                    ],
+                    correctIndex: 0
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          id: 'c-103',
+          title: 'الفيزياء الحديثة وتطبيقات ميكانيكا الكم',
+          description: 'استكشف أسرار الذرة والضوء والنسبية بأسلوب بصري مبسط مدعوم بأمثلة تطبيقية واختبارات تفاعلية.',
+          category: 'العلوم والرياضيات',
+          teacherId: 'u-teacher-2',
+          isFree: false,
+          published: true,
+          coverGradient: 'from-[#AF52DE] via-[#5856D6] to-[#0071E3]',
+          lectures: [
+            {
+              id: 'lec-103-1',
+              unit: 'الوحدة الأولى: ازدواجية الموجة والجسيم',
+              title: 'ظاهرة التأثير الكهروضوئي وتكميم الطاقة',
+              duration: '18:30',
+              videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+              notes: 'تحليل تجربة أينشتاين وماكس بلانك حول طبيعة الضوء الفوتونية.',
+              pdfName: 'مذكرة_الفيزياء_الحديثة_الفصل1.pdf',
+              pdfUrl: '#pdf-physics',
+              chapters: [
+                { time: 0, title: 'أزمة الفيزياء الكلاسيكية' },
+                { time: 20, title: 'فرضية بلانك وتفسير أينشتاين' }
+              ],
+              moments: [
+                { time: 16, label: 'معادلة طاقة الفوتون E = hf' }
+              ],
+              exam: null
+            }
+          ]
+        }
+      ],
+      subscriptionCodes: [
+        {
+          code: 'OFOQ-2026-PRO',
+          courseId: 'c-101',
+          used: false,
+          usedByUserId: null,
+          usedAt: null,
+          createdAt: '2026-11-15'
+        },
+        {
+          code: 'OFOQ-PHYS-88',
+          courseId: 'c-103',
+          used: false,
+          usedByUserId: null,
+          usedAt: null,
+          createdAt: '2026-11-18'
+        },
+        {
+          code: 'OFOQ-VIP-101',
+          courseId: 'c-101',
+          used: true,
+          usedByUserId: 'u-student-2',
+          usedAt: '2026-11-19 14:30',
+          createdAt: '2026-11-10'
+        }
+      ],
+      enrollments: [
+        {
+          userId: 'u-student-1',
+          courseId: 'c-102',
+          enrolledAt: '2026-11-18',
+          method: 'free',
+          completedLectures: []
+        },
+        {
+          userId: 'u-student-2',
+          courseId: 'c-101',
+          enrolledAt: '2026-11-19',
+          method: 'code: OFOQ-VIP-101',
+          completedLectures: ['lec-101-1']
+        }
+      ],
+      examSubmissions: [
+        {
+          id: 'sub-1',
+          userId: 'u-student-2',
+          courseId: 'c-101',
+          lectureId: 'lec-101-1',
+          examId: 'ex-101-1',
+          mcqScore: 100,
+          totalScore: 95,
+          passed: true,
+          essayAnswers: [
+            {
+              questionId: 'q3',
+              questionText: 'اشرح بإيجاز كيف يساهم التصميم المتجاوب في رفع جودة المنصات التعليمية؟',
+              studentAnswer: 'يتيح للطلاب متابعة المحاضرات وحل الاختبارات بسلاسة من الهاتف أو الكمبيوتر دون فقدان وضوح المحتوى.',
+              teacherGrade: 90,
+              graded: true
+            }
+          ],
+          submittedAt: '2026-11-19 15:10'
+        }
+      ]
+    };
+
+    // Load or initialize DB
+    function loadDB() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(initialSeedData));
+          return JSON.parse(JSON.stringify(initialSeedData));
+        }
+        return JSON.parse(raw);
+      } catch (e) {
+        return JSON.parse(JSON.stringify(initialSeedData));
+      }
+    }
+
+    function saveDB() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      } catch (e) {
+        showToast('تعذر حفظ البيانات محليًا', 'error');
+      }
+    }
+
+    let db = loadDB();
+
+    // Runtime UI State
+    let currentUser = db.users.find(u => u.id === 'u-student-1') || null; // Start logged in as Student for immediate exploration, or user can switch/logout
+    let authViewMode = 'login'; // 'login' | 'register' | 'verify' | 'forgot'
+    let pendingVerifyEmail = '';
+
+    // Sub-view states per role
+    let adminTab = 'overview'; // 'overview' | 'users' | 'courses' | 'codes' | 'enrollments'
+    let teacherTab = 'courses'; // 'courses' | 'essays'
+    let selectedTeacherCourseId = null;
+
+    let studentTab = 'catalog'; // 'catalog' | 'grades' | 'player'
+    let studentCourseFilter = 'all'; // 'all' | 'enrolled' | 'free' | 'paid'
+    let activeCourseId = null;
+    let activeLectureId = null;
+    let activeExamMode = false;
+
+    // Video Player Runtime State
+    let isPiP = false;
+
+    // =========================================================================
+    // 2. HELPER UTILITIES & TOASTS & MODALS
+    // =========================================================================
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const id = 'toast-' + Date.now();
+      const colors = {
+        success: 'bg-[#1D1D1F] text-white border-emerald-500/40',
+        error: 'bg-[#1D1D1F] text-white border-rose-500/40',
+        info: 'bg-[#1D1D1F] text-white border-sky-500/40'
+      };
+      const icons = {
+        success: '<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0"></i>',
+        error: '<i data-lucide="alert-circle" class="w-5 h-5 text-rose-400 shrink-0"></i>',
+        info: '<i data-lucide="info" class="w-5 h-5 text-sky-400 shrink-0"></i>'
+      };
+
+      const el = document.createElement('div');
+      el.id = id;
+      el.className = `pointer-events-auto flex items-center gap-3 px-4 py-3.5 rounded-2xl shadow-xl border ${colors[type] || colors.info} animate-view text-sm font-medium`;
+      el.innerHTML = `${icons[type] || icons.info}<span>${message}</span>`;
+      container.appendChild(el);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(8px)';
+        el.style.transition = 'all 0.25s ease';
+        setTimeout(() => el.remove(), 250);
+      }, 3400);
+    }
+
+    function openModal(htmlContent) {
+      const backdrop = document.getElementById('modal-backdrop');
+      const box = document.getElementById('modal-box');
+      box.innerHTML = htmlContent;
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeModal() {
+      const backdrop = document.getElementById('modal-backdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
+    }
+
+    document.getElementById('modal-backdrop').addEventListener('click', (e) => {
+      if (e.target.id === 'modal-backdrop') closeModal();
+    });
+
+    function resetDemoData() {
+      localStorage.removeItem(STORAGE_KEY);
+      db = loadDB();
+      currentUser = db.users.find(u => u.id === 'u-student-1');
+      studentTab = 'catalog';
+      adminTab = 'overview';
+      teacherTab = 'courses';
+      showToast('تمت إعادة ضبط بيانات المنصة إلى الحالة الافتراضية', 'info');
+      renderApp();
+    }
+
+    // Simulated Row-Level Security (RLS) Guard
+    function enforceRLS(requiredRole) {
+      if (!currentUser || currentUser.status !== 'active') {
+        showToast('تم رفض الوصول (RLS): الحساب غير نشط أو غير مصرح له', 'error');
+        return false;
+      }
+      if (requiredRole && currentUser.role !== requiredRole) {
+        showToast('تم رفض الوصول (RLS): لا تملك صلاحيات هذه الواجهة', 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function quickSwitchRole(role) {
+      const target = db.users.find(u => u.role === role && u.status === 'active');
+      if (!target) {
+        showToast('لا يوجد حساب نشط لهذا الدور حاليًا', 'error');
+        return;
+      }
+      currentUser = target;
+      activeExamMode = false;
+      isPiP = false;
+      if (role === 'admin') adminTab = 'overview';
+      if (role === 'teacher') {
+        teacherTab = 'courses';
+        selectedTeacherCourseId = null;
+      }
+      if (role === 'student') studentTab = 'catalog';
+
+      const roleNames = { admin: 'الإدارة العامة', teacher: 'المدرس', student: 'الطالب' };
+      showToast(`تم التبديل الفوري إلى حساب ${roleNames[role]}: ${target.name}`, 'info');
+      renderApp();
+    }
+
+    function logoutUser() {
+      currentUser = null;
+      authViewMode = 'login';
+      isPiP = false;
+      renderApp();
+    }
+
+    // =========================================================================
+    // 3. AUTHENTICATION & SECURITY MODULE (Login, Register, Verify, Recovery)
+    // =========================================================================
+    function renderAuthScreen() {
+      document.getElementById('main-header').classList.add('hidden');
+      const app = document.getElementById('app-container');
+
+      let formHtml = '';
+
+      if (authViewMode === 'login') {
+        formHtml = `
+          <div class="text-center mb-7">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-[#0071E3] to-[#42A1EC] flex items-center justify-center text-white shadow-md mb-4">
+              <i data-lucide="sparkles" class="w-7 h-7"></i>
+            </div>
+            <h1 class="text-2xl font-display font-extrabold text-[#1D1D1F]">مرحباً بك في منصة أُفُق</h1>
+            <p class="text-sm text-[#6E6E73] mt-1">سجّل الدخول للوصول إلى لوحة التحكم الخاصة بك</p>
+          </div>
+
+          <form onsubmit="handleLogin(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-[#1D1D1F] mb-1.5">البريد الإلكتروني</label>
+              <input type="email" id="login-email" required placeholder="example@ofoq.edu"
+                class="w-full px-4 py-3 rounded-xl bg-[#F5F5F7] border border-transparent focus:border-[#0071E3] focus:bg-white outline-none transition text-sm" />
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="block text-xs font-semibold text-[#1D1D1F]">كلمة المرور</label>
+                <button type="button" onclick="authViewMode='forgot'; renderAuthScreen();" class="text-xs text-[#0071E3] hover:underline font-medium">
+                  نسيت كلمة المرور؟
+                </button>
+              </div>
+              <div class="relative">
+                <input type="password" id="login-password" required placeholder="••••••••"
+                  class="w-full px-4 py-3 rounded-xl bg-[#F5F5F7] border border-transparent focus:border-[#0071E3] focus:bg-white outline-none transition text-sm pl-11" />
+                <button type="button" onclick="togglePasswordVisibility('login-password', 'eye-login')"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 text-[#6E6E73] hover:text-[#1D1D1F] p-1">
+                  <i id="eye-login" data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white font-semibold text-sm shadow-sm transition active:scale-[0.99]">
+              تسجيل الدخول
+            </button>
+          </form>
+
+          <div class="mt-6 pt-5 border-t border-black/5">
+            <p class="text-xs text-center text-[#6E6E73] mb-3 font-medium">حسابات تجريبية جاهزة (كلمة المرور للجميع: <code class="bg-black/5 px-1.5 py-0.5 rounded font-bold text-[#1D1D1F]">123</code>)</p>
+            <div class="grid grid-cols-3 gap-2 text-xs">
+              <button type="button" onclick="fillDemoLogin('admin@ofoq.edu')" class="p-2.5 rounded-xl bg-[#F5F5F7] hover:bg-blue-50 hover:text-[#0071E3] transition text-center font-semibold">
+                مدير النظام
+              </button>
+              <button type="button" onclick="fillDemoLogin('sara@ofoq.edu')" class="p-2.5 rounded-xl bg-[#F5F5F7] hover:bg-blue-50 hover:text-[#0071E3] transition text-center font-semibold">
+                مدرس (د. سارة)
+              </button>
+              <button type="button" onclick="fillDemoLogin('omar@student.edu')" class="p-2.5 rounded-xl bg-[#F5F5F7] hover:bg-blue-50 hover:text-[#0071E3] transition text-center font-semibold">
+                طالب (عمر)
+              </button>
+            </div>
+          </div>
+
+          <p class="text-center text-sm text-[#6E6E73] mt-6">
+            طالب جديد؟
+            <button type="button" onclick="authViewMode='register'; renderAuthScreen();" class="text-[#0071E3] font-semibold hover:underline">
+              إنشاء حساب طالب جديد
+            </button>
+          </p>
+        `;
+      } else if (authViewMode === 'register') {
+        formHtml = `
+          <div class="text-center mb-6">
+            <h2 class="text-2xl font-display font-extrabold text-[#1D1D1F]">إنشاء حساب طالب جديد</h2>
+            <p class="text-sm text-[#6E6E73] mt-1">انضم الآن وابدأ رحلتك التعليمية</p>
+          </div>
+
+          <form onsubmit="handleRegister(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-[#1D1D1F] mb-1.5">الاسم الكامل</label>
+              <input type="text" id="reg-name" required placeholder="مثال: أحمد محمد السالم"
+                class="w-full px-4 py-3 rounded-xl bg-[#F5F5F7] border border-transparent focus:border-[#0071E3] focus:bg-white outline-none transition text-sm" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[#1D1D1F] mb-1.5">البريد الإلكتروني</label>
+              <input type="email" id="reg-email" required placeholder="student@example.com"
+                class="w-full px-4 py-3 rounded-xl bg-[#F5F5F7] border border-transparent focus:border-[#0071E3] focus:bg-white outline-none transition text-sm" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[#1D1D1F] mb-1.5">كلمة المرور</label>
+              <div class="relative">
+                <input type="password" id="reg-password" required minlength="3" placeholder="اختر كلمة مرور قوية"
+                  class="w-full px-4 py-3 rounded-xl bg-[#F5F5F7] border border-transparent focus:border-[#0071E3] focus:bg-white outline-none transition text-sm pl-11" />
+                <button type="button" onclick="togglePasswordVisibility('reg-password', 'eye-reg')"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 text-[#6E6E73] hover:text-[#1D1D1F] p-1">
+                  <i id="eye-reg" data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white font-semibold text-sm shadow-sm transition">
+              متابعة وتأكيد البريد الإلكتروني
+            </button>
+          </form>
+
+          <p class="text-center text-sm text-[#6E6E73] mt-6">
+            لديك حساب بالفعل؟
+            <button type="button" onclick="authViewMode='login'; renderAuthScreen();" class="text-[#0071E3] font-semibold hover:underline">
+              تسجيل الدخول
+            </button>
+          </p>
+        `;
+      } else if (authViewMode === 'verify') {
+        formHtml = `
+          <div class="text-center py-4">
+            <div class="w-16 h-16 mx-auto rounded-full bg-blue-50 text-[#0071E3] flex items-center justify-center mb-4">
+              <i data-lucide="mail-check" class="w-8 h-8"></i>
+            </div>
+            <h2 class="text-xl font-display font-bold text-[#1D1D1F]">تأكيد البريد الإلكتروني</h2>
+            <p class="text-sm text-[#6E6E73] mt-2 leading-relaxed">
+              تم إرسال رمز التحقق المكون من 4 أرقام إلى البريد:<br>
+              <span class="font-semibold text-[#1D1D1F]">${pendingVerifyEmail}</span>
+            </p>
+            <div class="mt-5 max-w-xs mx-auto">
+              <input type="text" id="verify-code-input" maxlength="4" value="2026"
+                class="w-full text-center tracking-[0.6em] text-2xl font-bold py-3 rounded-xl bg-[#F5F5F7] border border-black/10 focus:border-[#0071E3] outline-none" />
+              <p class="text-[11px] text-[#6E6E73] mt-1.5">رمز المحاكاة الجاهز: 2026</p>
+            </div>
+            <button onclick="completeEmailVerification()" class="mt-6 w-full py-3.5 rounded-xl bg-[#34C759] hover:opacity-95 text-white font-semibold text-sm transition">
+              تفعيل الحساب والدخول للمنصة
+            </button>
+          </div>
+        `;
+      } else if (authViewMode === 'forgot') {
+        formHtml = `
+          <div class="text-center mb-6">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3">
+              <i data-lucide="key-round" class="w-7 h-7"></i>
+            </div>
+            <h2 class="text-xl font-display font-bold text-[#1D1D1F]">استعادة كلمة المرور</h2>
+            <p class="text-sm text-[#6E6E73] mt-1">أدخل بريدك الإلكتروني المسجل لإعادة تعيين كلمة المرور</p>
+          </div>
+          <form onsubmit="handlePasswordReset(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-[#1D1D1F] mb-1.5">البريد الإلكتروني</label>
+              <input type="email" id="reset-email" required placeholder="omar@student.edu"
+                class="w-full px-4 py-3 rounded-xl bg-[#F5F5F7] outline-none focus:border-[#0071E3] border border-transparent text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#1D1D1F] mb-1.5">كلمة المرور الجديدة</label>
+              <input type="password" id="reset-new-pass" required placeholder="أدخل كلمة المرور الجديدة"
+                class="w-full px-4 py-3 rounded-xl bg-[#F5F5F7] outline-none focus:border-[#0071E3] border border-transparent text-sm" />
+            </div>
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-[#0071E3] text-white font-semibold text-sm">
+              تحديث كلمة المرور
+            </button>
+          </form>
+          <button onclick="authViewMode='login'; renderAuthScreen();" class="mt-4 w-full text-center text-sm text-[#6E6E73] hover:text-[#1D1D1F]">
+            العودة لتسجيل الدخول
+          </button>
+        `;
+      }
+
+      app.innerHTML = `
+        <div class="min-h-[78vh] flex items-center justify-center">
+          <div class="apple-card w-full max-w-md p-7 sm:p-9 animate-view">
+            ${formHtml}
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
+
+    function fillDemoLogin(email) {
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-password').value = '123';
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
+
+      const user = db.users.find(u => u.email.toLowerCase() === email && u.password === password);
+      if (!user) {
+        showToast('بيانات الدخول غير صحيحة. تأكد من البريد وكلمة المرور.', 'error');
+        return;
+      }
+      if (user.status !== 'active') {
+        showToast('هذا الحساب موقوف مؤقتًا من قِبل الإدارة.', 'error');
+        return;
+      }
+      if (!user.verified) {
+        pendingVerifyEmail = user.email;
+        authViewMode = 'verify';
+        renderAuthScreen();
+        return;
+      }
+
+      currentUser = user;
+      showToast(`أهلاً بعودتك، ${user.name}!`, 'success');
+      renderApp();
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim().toLowerCase();
+      const password = document.getElementById('reg-password').value;
+
+      if (db.users.some(u => u.email.toLowerCase() === email)) {
+        showToast('هذا البريد الإلكتروني مسجل مسبقًا!', 'error');
+        return;
+      }
+
+      const newUser = {
+        id: 'u-student-' + Date.now(),
+        name,
+        email,
+        password,
+        role: 'student',
+        verified: false,
+        status: 'active'
+      };
+      db.users.push(newUser);
+      saveDB();
+
+      pendingVerifyEmail = email;
+      authViewMode = 'verify';
+      showToast('تم إنشاء الحساب! يرجى تأكيد البريد الإلكتروني.', 'info');
+      renderAuthScreen();
+    }
+
+    function completeEmailVerification() {
+      const code = document.getElementById('verify-code-input').value.trim();
+      if (code.length < 4) {
+        showToast('يرجى إدخال رمز التحقق المكون من 4 أرقام', 'error');
+        return;
+      }
+      const user = db.users.find(u => u.email === pendingVerifyEmail);
+      if (user) {
+        user.verified = true;
+        saveDB();
+        currentUser = user;
+        showToast('تم تأكيد البريد الإلكتروني وتفعيل حسابك بنجاح!', 'success');
+        renderApp();
+      }
+    }
+
+    function handlePasswordReset(e) {
+      e.preventDefault();
+      const email = document.getElementById('reset-email').value.trim().toLowerCase();
+      const newPass = document.getElementById('reset-new-pass').value;
+      const user = db.users.find(u => u.email.toLowerCase() === email);
+      if (!user) {
+        showToast('لم يتم العثور على حساب مرتبط بهذا البريد الإلكتروني', 'error');
+        return;
+      }
+      user.password = newPass;
+      saveDB();
+      showToast('تم تحديث كلمة المرور بنجاح! يمكنك تسجيل الدخول الآن.', 'success');
+      authViewMode = 'login';
+      renderAuthScreen();
+    }
+
+    // =========================================================================
+    // 4. ADMIN DASHBOARD MODULE (لوحة تحكم الإدارة)
+    // =========================================================================
+    function renderAdminDashboard() {
+      if (!enforceRLS('admin')) return;
+      const app = document.getElementById('app-container');
+
+      const students = db.users.filter(u => u.role === 'student');
+      const teachers = db.users.filter(u => u.role === 'teacher');
+      const publishedCourses = db.courses.filter(c => c.published);
+      const usedCodes = db.subscriptionCodes.filter(c => c.used);
+
+      let tabContent = '';
+
+      if (adminTab === 'overview') {
+        tabContent = `
+          <!-- KPI Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-7">
+            <div class="apple-card p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-[#6E6E73]">إجمالي الطلاب</span>
+                <div class="w-10 h-10 rounded-2xl bg-blue-50 text-[#0071E3] flex items-center justify-center">
+                  <i data-lucide="users" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <div class="text-3xl font-display font-extrabold text-[#1D1D1F]">${students.length}</div>
+              <p class="text-xs text-emerald-600 mt-1 font-medium">نشطون على المنصة</p>
+            </div>
+
+            <div class="apple-card p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-[#6E6E73]">هيئة التدريس</span>
+                <div class="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                  <i data-lucide="presentation" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <div class="text-3xl font-display font-extrabold text-[#1D1D1F]">${teachers.length}</div>
+              <p class="text-xs text-[#6E6E73] mt-1">مدرسون بصلاحيات مخصصة</p>
+            </div>
+
+            <div class="apple-card p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-[#6E6E73]">الكورسات المنشورة</span>
+                <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <i data-lucide="book-open" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <div class="text-3xl font-display font-extrabold text-[#1D1D1F]">${publishedCourses.length} <span class="text-sm font-normal text-[#6E6E73]">/ ${db.courses.length}</span></div>
+              <p class="text-xs text-[#6E6E73] mt-1">متاحة للطلاب حاليًا</p>
+            </div>
+
+            <div class="apple-card p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-[#6E6E73]">أكواد الاشتراك المفعلة</span>
+                <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                  <i data-lucide="ticket" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <div class="text-3xl font-display font-extrabold text-[#1D1D1F]">${usedCodes.length} <span class="text-sm font-normal text-[#6E6E73]">/ ${db.subscriptionCodes.length}</span></div>
+              <p class="text-xs text-[#6E6E73] mt-1">إجمالي الاشتراكات المدفوعة</p>
+            </div>
+          </div>
+
+          <!-- Recent Activity & Quick Actions -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="apple-card p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-display font-bold text-lg">أحدث تفعيلات أكواد الاشتراك</h3>
+                <button onclick="adminTab='codes'; renderAdminDashboard();" class="text-xs text-[#0071E3] font-semibold hover:underline">عرض الكل</button>
+              </div>
+              <div class="space-y-3">
+                ${db.subscriptionCodes.slice(0, 4).map(sc => {
+                  const course = db.courses.find(c => c.id === sc.courseId);
+                  const user = db.users.find(u => u.id === sc.usedByUserId);
+                  return `
+                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#F5F5F7]">
+                      <div>
+                        <div class="font-mono font-bold text-sm text-[#1D1D1F]">${sc.code}</div>
+                        <div class="text-xs text-[#6E6E73] mt-0.5">${course ? course.title : 'كورس محذوف'}</div>
+                      </div>
+                      <div class="text-left">
+                        ${sc.used
+                          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">مستخدم (${user ? user.name : ''})</span>`
+                          : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-[#0071E3]">متاح للتفعيل</span>`
+                        }
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <div class="apple-card p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-display font-bold text-lg">إجراءات إدارية سريعة</h3>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button onclick="openAddTeacherModal()" class="p-4 rounded-2xl bg-[#F5F5F7] hover:bg-blue-50 transition text-right group">
+                  <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-[#0071E3] mb-3 group-hover:scale-105 transition">
+                    <i data-lucide="user-plus" class="w-5 h-5"></i>
+                  </div>
+                  <div class="font-bold text-sm text-[#1D1D1F]">إضافة مدرس جديد</div>
+                  <div class="text-xs text-[#6E6E73] mt-0.5">تحديد الصلاحيات والتخصص</div>
+                </button>
+
+                <button onclick="openCourseModal()" class="p-4 rounded-2xl bg-[#F5F5F7] hover:bg-blue-50 transition text-right group">
+                  <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-[#0071E3] mb-3 group-hover:scale-105 transition">
+                    <i data-lucide="folder-plus" class="w-5 h-5"></i>
+                  </div>
+                  <div class="font-bold text-sm text-[#1D1D1F]">إنشاء كورس جديد</div>
+                  <div class="text-xs text-[#6E6E73] mt-0.5">تعيين المدرس ونوع الاشتراك</div>
+                </button>
+
+                <button onclick="openGenerateCodesModal()" class="p-4 rounded-2xl bg-[#F5F5F7] hover:bg-blue-50 transition text-right group">
+                  <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-amber-600 mb-3 group-hover:scale-105 transition">
+                    <i data-lucide="qr-code" class="w-5 h-5"></i>
+                  </div>
+                  <div class="font-bold text-sm text-[#1D1D1F]">توليد أكواد اشتراك</div>
+                  <div class="text-xs text-[#6E6E73] mt-0.5">إنشاء أكواد فردية أو دفعات</div>
+                </button>
+
+                <button onclick="adminTab='enrollments'; renderAdminDashboard();" class="p-4 rounded-2xl bg-[#F5F5F7] hover:bg-blue-50 transition text-right group">
+                  <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-emerald-600 mb-3 group-hover:scale-105 transition">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                  </div>
+                  <div class="font-bold text-sm text-[#1D1D1F]">سجل الطلاب والنتائج</div>
+                  <div class="text-xs text-[#6E6E73] mt-0.5">متابعة التقدم والدرجات</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (adminTab === 'users') {
+        tabContent = `
+          <div class="space-y-6">
+            <!-- Teachers Section -->
+            <div class="apple-card p-6">
+              <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+                <div>
+                  <h3 class="font-display font-bold text-lg">إدارة المدرسين والصلاحيات</h3>
+                  <p class="text-xs text-[#6E6E73]">التحكم في حسابات المدرسين وصلاحيات إنشاء الكورسات والمحاضرات والامتحانات</p>
+                </div>
+                <button onclick="openAddTeacherModal()" class="px-4 py-2.5 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-semibold flex items-center gap-2 shadow-sm">
+                  <i data-lucide="user-plus" class="w-4 h-4"></i>
+                  إضافة مدرس جديد
+                </button>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                  <thead>
+                    <tr class="border-b border-black/5 text-xs text-[#6E6E73]">
+                      <th class="py-3 px-3">المدرس</th>
+                      <th class="py-3 px-3">التخصص</th>
+                      <th class="py-3 px-3">الصلاحيات الممنوحة</th>
+                      <th class="py-3 px-3">الحالة</th>
+                      <th class="py-3 px-3">إجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-black/5 text-sm">
+                    ${teachers.map(t => `
+                      <tr class="hover:bg-black/[0.015]">
+                        <td class="py-3.5 px-3">
+                          <div class="font-bold text-[#1D1D1F]">${t.name}</div>
+                          <div class="text-xs text-[#6E6E73]">${t.email}</div>
+                        </td>
+                        <td class="py-3.5 px-3 text-xs">${t.specialty || 'عام'}</td>
+                        <td class="py-3.5 px-3">
+                          <div class="flex flex-wrap gap-1.5 text-[11px]">
+                            <span class="px-2 py-0.5 rounded-md ${t.permissions?.canCreateCourse ? 'bg-blue-50 text-[#0071E3] font-semibold' : 'bg-gray-100 text-gray-400 line-through'}">إنشاء كورسات</span>
+                            <span class="px-2 py-0.5 rounded-md ${t.permissions?.canEditLectures ? 'bg-blue-50 text-[#0071E3] font-semibold' : 'bg-gray-100 text-gray-400 line-through'}">إدارة المحاضرات</span>
+                            <span class="px-2 py-0.5 rounded-md ${t.permissions?.canManageExams ? 'bg-blue-50 text-[#0071E3] font-semibold' : 'bg-gray-100 text-gray-400 line-through'}">إدارة الامتحانات</span>
+                          </div>
+                        </td>
+                        <td class="py-3.5 px-3">
+                          <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${t.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-600'}">
+                            ${t.status === 'active' ? 'نشط' : 'موقوف'}
+                          </span>
+                        </td>
+                        <td class="py-3.5 px-3">
+                          <div class="flex items-center gap-2">
+                            <button onclick="openEditTeacherPermsModal('${t.id}')" class="px-3 py-1.5 rounded-lg bg-[#F5F5F7] hover:bg-blue-50 hover:text-[#0071E3] text-xs font-semibold transition">
+                              تعديل الصلاحيات
+                            </button>
+                            <button onclick="toggleUserStatus('${t.id}')" class="px-3 py-1.5 rounded-lg bg-[#F5F5F7] hover:bg-rose-50 hover:text-rose-600 text-xs font-semibold transition">
+                              ${t.status === 'active' ? 'إيقاف' : 'تفعيل'}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Students Section -->
+            <div class="apple-card p-6">
+              <h3 class="font-display font-bold text-lg mb-4">حسابات الطلاب المسجلين (${students.length})</h3>
+              <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                  <thead>
+                    <tr class="border-b border-black/5 text-xs text-[#6E6E73]">
+                      <th class="py-3 px-3">الطالب</th>
+                      <th class="py-3 px-3">البريد الإلكتروني</th>
+                      <th class="py-3 px-3">الكورسات المشترك بها</th>
+                      <th class="py-3 px-3">الحالة</th>
+                      <th class="py-3 px-3">إجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-black/5 text-sm">
+                    ${students.map(s => {
+                      const count = db.enrollments.filter(e => e.userId === s.id).length;
+                      return `
+                        <tr class="hover:bg-black/[0.015]">
+                          <td class="py-3.5 px-3 font-bold">${s.name}</td>
+                          <td class="py-3.5 px-3 text-xs text-[#6E6E73]">${s.email}</td>
+                          <td class="py-3.5 px-3 text-xs font-semibold">${count} كورسات</td>
+                          <td class="py-3.5 px-3">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${s.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-600'}">
+                              ${s.status === 'active' ? 'نشط' : 'موقوف'}
+                            </span>
+                          </td>
+                          <td class="py-3.5 px-3">
+                            <button onclick="toggleUserStatus('${s.id}')" class="px-3 py-1.5 rounded-lg bg-[#F5F5F7] hover:bg-rose-50 hover:text-rose-600 text-xs font-semibold transition">
+                              ${s.status === 'active' ? 'إيقاف الحساب' : 'تفعيل الحساب'}
+                            </button>
+                          </td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (adminTab === 'courses') {
+        tabContent = `
+          <div class="apple-card p-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+              <div>
+                <h3 class="font-display font-bold text-lg">إدارة الكورسات والمحتوى التعليمي</h3>
+                <p class="text-xs text-[#6E6E73]">إنشاء وتعديل وحذف الكورسات، تحديد المجانية أو نظام الأكواد، والنشر</p>
+              </div>
+              <button onclick="openCourseModal()" class="px-4 py-2.5 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-semibold flex items-center gap-2 shadow-sm">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                إنشاء كورس جديد
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              ${db.courses.map(course => {
+                const teacher = db.users.find(u => u.id === course.teacherId);
+                return `
+                  <div class="rounded-2xl border border-black/10 overflow-hidden bg-white flex flex-col justify-between">
+                    <div>
+                      <div class="h-28 bg-gradient-to-l ${course.coverGradient} p-4 flex flex-col justify-between text-white">
+                        <div class="flex items-center justify-between">
+                          <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-black/25 backdrop-blur-sm">
+                            ${course.isFree ? 'مجاني بالكامل' : 'يتطلب كود اشتراك'}
+                          </span>
+                          <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${course.published ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white'}">
+                            ${course.published ? 'منشور' : 'مسودة مخفية'}
+                          </span>
+                        </div>
+                        <span class="text-xs text-white/90 font-medium">${course.category}</span>
+                      </div>
+
+                      <div class="p-4">
+                        <h4 class="font-display font-bold text-base text-[#1D1D1F] line-clamp-1">${course.title}</h4>
+                        <p class="text-xs text-[#6E6E73] mt-1 line-clamp-2">${course.description}</p>
+                        <div class="mt-3 pt-3 border-t border-black/5 flex items-center justify-between text-xs text-[#6E6E73]">
+                          <span>المدرس: <strong class="text-[#1D1D1F]">${teacher ? teacher.name : 'غير محدد'}</strong></span>
+                          <span>${course.lectures.length} محاضرات</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="p-3 bg-[#F5F5F7] flex flex-wrap items-center gap-1.5">
+                      <button onclick="openCourseModal('${course.id}')" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-blue-50 text-[#1D1D1F] hover:text-[#0071E3] text-xs font-semibold shadow-sm transition">
+                        تعديل
+                      </button>
+                      <button onclick="toggleCoursePublish('${course.id}')" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-amber-50 text-[#1D1D1F] hover:text-amber-600 text-xs font-semibold shadow-sm transition">
+                        ${course.published ? 'إلغاء النشر' : 'نشر الكورس'}
+                      </button>
+                      <button onclick="deleteCourse('${course.id}')" class="p-2 rounded-xl bg-white hover:bg-rose-50 text-rose-600 shadow-sm transition" title="حذف الكورس">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      } else if (adminTab === 'codes') {
+        tabContent = `
+          <div class="apple-card p-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+              <div>
+                <h3 class="font-display font-bold text-lg">إدارة ومتابعة أكواد الاشتراك</h3>
+                <p class="text-xs text-[#6E6E73]">توليد أكواد تفعيل مرتبطة بالكورسات ومتابعة الطلاب الذين قاموا باستخدامها</p>
+              </div>
+              <button onclick="openGenerateCodesModal()" class="px-4 py-2.5 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-semibold flex items-center gap-2 shadow-sm">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                إنشاء أكواد جديدة
+              </button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-right border-collapse">
+                <thead>
+                  <tr class="border-b border-black/5 text-xs text-[#6E6E73]">
+                    <th class="py-3 px-3">كود الاشتراك</th>
+                    <th class="py-3 px-3">الكورس المرتبط</th>
+                    <th class="py-3 px-3">حالة الكود</th>
+                    <th class="py-3 px-3">الحساب المُفعِّل</th>
+                    <th class="py-3 px-3">تاريخ التفعيل</th>
+                    <th class="py-3 px-3">نسخ</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-black/5 text-sm">
+                  ${db.subscriptionCodes.map(sc => {
+                    const course = db.courses.find(c => c.id === sc.courseId);
+                    const user = db.users.find(u => u.id === sc.usedByUserId);
+                    return `
+                      <tr class="hover:bg-black/[0.015]">
+                        <td class="py-3.5 px-3 font-mono font-bold text-[#1D1D1F]">${sc.code}</td>
+                        <td class="py-3.5 px-3 text-xs font-medium">${course ? course.title : 'غير محدد'}</td>
+                        <td class="py-3.5 px-3">
+                          ${sc.used
+                            ? '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">مُستخدم</span>'
+                            : '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">متاح</span>'
+                          }
+                        </td>
+                        <td class="py-3.5 px-3 text-xs">
+                          ${user ? `<strong>${user.name}</strong> <span class="text-[#6E6E73]">(${user.email})</span>` : '<span class="text-[#6E6E73]">—</span>'}
+                        </td>
+                        <td class="py-3.5 px-3 text-xs text-[#6E6E73]">${sc.usedAt || '—'}</td>
+                        <td class="py-3.5 px-3">
+                          <button onclick="copyTextToClipboard('${sc.code}')" class="p-2 rounded-lg bg-[#F5F5F7] hover:bg-blue-50 text-[#0071E3] transition" title="نسخ الكود">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      } else if (adminTab === 'enrollments') {
+        tabContent = `
+          <div class="apple-card p-6">
+            <h3 class="font-display font-bold text-lg mb-4">سجل الاشتراكات والتسجيلات (${db.enrollments.length})</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-right border-collapse">
+                <thead>
+                  <tr class="border-b border-black/5 text-xs text-[#6E6E73]">
+                    <th class="py-3 px-3">الطالب</th>
+                    <th class="py-3 px-3">الكورس</th>
+                    <th class="py-3 px-3">طريقة الاشتراك</th>
+                    <th class="py-3 px-3">تاريخ التسجيل</th>
+                    <th class="py-3 px-3">نسبة الإنجاز</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-black/5 text-sm">
+                  ${db.enrollments.map(enr => {
+                    const user = db.users.find(u => u.id === enr.userId);
+                    const course = db.courses.find(c => c.id === enr.courseId);
+                    const totalLecs = course ? course.lectures.length : 1;
+                    const pct = course && totalLecs > 0 ? Math.round((enr.completedLectures.length / totalLecs) * 100) : 0;
+                    return `
+                      <tr class="hover:bg-black/[0.015]">
+                        <td class="py-3.5 px-3 font-bold">${user ? user.name : 'طالب'}</td>
+                        <td class="py-3.5 px-3 text-xs font-medium">${course ? course.title : 'كورس'}</td>
+                        <td class="py-3.5 px-3 text-xs font-mono">${enr.method === 'free' ? 'تسجيل مجاني' : enr.method}</td>
+                        <td class="py-3.5 px-3 text-xs text-[#6E6E73]">${enr.enrolledAt}</td>
+                        <td class="py-3.5 px-3">
+                          <div class="flex items-center gap-2">
+                            <div class="w-24 h-2 rounded-full bg-gray-200 overflow-hidden">
+                              <div class="h-full bg-[#34C759]" style="width: ${pct}%"></div>
+                            </div>
+                            <span class="text-xs font-bold">${pct}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      app.innerHTML = `
+        <div class="animate-view">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-display font-extrabold text-[#1D1D1F]">لوحة تحكم الإدارة المركزية</h1>
+              <p class="text-sm text-[#6E6E73] mt-1">تحكم شامل في المستخدمين، الكورسات، الصلاحيات، وأكواد الاشتراك</p>
+            </div>
+
+            <!-- Apple Segmented Navigation -->
+            <div class="segmented-bg inline-flex flex-wrap gap-1">
+              <button onclick="adminTab='overview'; renderAdminDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${adminTab==='overview' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73] hover:text-[#1D1D1F]'}">نظرة عامة</button>
+              <button onclick="adminTab='users'; renderAdminDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${adminTab==='users' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73] hover:text-[#1D1D1F]'}">المدرسون والطلاب</button>
+              <button onclick="adminTab='courses'; renderAdminDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${adminTab==='courses' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73] hover:text-[#1D1D1F]'}">الكورسات</button>
+              <button onclick="adminTab='codes'; renderAdminDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${adminTab==='codes' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73] hover:text-[#1D1D1F]'}">أكواد الاشتراك</button>
+              <button onclick="adminTab='enrollments'; renderAdminDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${adminTab==='enrollments' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73] hover:text-[#1D1D1F]'}">التسجيلات</button>
+            </div>
+          </div>
+
+          ${tabContent}
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    // Admin Modals & Actions
+    function openAddTeacherModal() {
+      openModal(`
+        <div class="p-6">
+          <div class="flex items-center justify-between pb-4 border-b border-black/5">
+            <h3 class="font-display font-bold text-lg">إضافة مدرس جديد وتعيين الصلاحيات</h3>
+            <button onclick="closeModal()" class="p-1.5 rounded-lg hover:bg-black/5"><i data-lucide="x" class="w-5 h-5"></i></button>
+          </div>
+          <form onsubmit="submitAddTeacher(event)" class="space-y-4 mt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold mb-1">اسم المدرس</label>
+                <input type="text" id="t-name" required placeholder="د. محمد الهاشمي" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">التخصص الأكاديمي</label>
+                <input type="text" id="t-spec" required placeholder="هندسة البرمجيات" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold mb-1">البريد الإلكتروني</label>
+                <input type="email" id="t-email" required placeholder="teacher@ofoq.edu" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">كلمة المرور</label>
+                <input type="text" id="t-pass" required value="123" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#F5F5F7] space-y-2.5">
+              <div class="text-xs font-bold text-[#1D1D1F]">صلاحيات المدرس في النظام:</div>
+              <label class="flex items-center gap-2.5 text-sm cursor-pointer">
+                <input type="checkbox" id="perm-create" checked class="w-4 h-4 accent-[#0071E3]" />
+                <span>السماح بإنشاء كورسات جديدة</span>
+              </label>
+              <label class="flex items-center gap-2.5 text-sm cursor-pointer">
+                <input type="checkbox" id="perm-lectures" checked class="w-4 h-4 accent-[#0071E3]" />
+                <span>السماح بإضافة وتعديل المحاضرات وملفات PDF</span>
+              </label>
+              <label class="flex items-center gap-2.5 text-sm cursor-pointer">
+                <input type="checkbox" id="perm-exams" checked class="w-4 h-4 accent-[#0071E3]" />
+                <span>السماح بإنشاء وتصحيح الامتحانات</span>
+              </label>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-[#F5F5F7] text-xs font-bold">إلغاء</button>
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#0071E3] text-white text-xs font-bold">حفظ وإضافة المدرس</button>
+            </div>
+          </form>
+        </div>
+      `);
+    }
+
+    function submitAddTeacher(e) {
+      e.preventDefault();
+      const email = document.getElementById('t-email').value.trim().toLowerCase();
+      if (db.users.some(u => u.email.toLowerCase() === email)) {
+        showToast('البريد الإلكتروني مستخدم بالفعل', 'error');
+        return;
+      }
+      db.users.push({
+        id: 'u-teacher-' + Date.now(),
+        name: document.getElementById('t-name').value.trim(),
+        specialty: document.getElementById('t-spec').value.trim(),
+        email,
+        password: document.getElementById('t-pass').value,
+        role: 'teacher',
+        verified: true,
+        status: 'active',
+        permissions: {
+          canCreateCourse: document.getElementById('perm-create').checked,
+          canEditLectures: document.getElementById('perm-lectures').checked,
+          canManageExams: document.getElementById('perm-exams').checked
+        }
+      });
+      saveDB();
+      closeModal();
+      showToast('تمت إضافة المدرس وتعيين صلاحياته بنجاح', 'success');
+      renderAdminDashboard();
+    }
+
+    function openEditTeacherPermsModal(teacherId) {
+      const t = db.users.find(u => u.id === teacherId);
+      if (!t) return;
+      openModal(`
+        <div class="p-6">
+          <h3 class="font-display font-bold text-lg mb-1">تعديل صلاحيات المدرس: ${t.name}</h3>
+          <p class="text-xs text-[#6E6E73] mb-4">يتم تطبيق الصلاحيات فورًا على لوحة تحكم المدرس</p>
+          <div class="space-y-3 p-4 rounded-2xl bg-[#F5F5F7]">
+            <label class="flex items-center gap-2.5 text-sm cursor-pointer">
+              <input type="checkbox" id="edit-perm-create" ${t.permissions?.canCreateCourse ? 'checked' : ''} class="w-4 h-4 accent-[#0071E3]" />
+              <span>إنشاء كورسات جديدة</span>
+            </label>
+            <label class="flex items-center gap-2.5 text-sm cursor-pointer">
+              <input type="checkbox" id="edit-perm-lectures" ${t.permissions?.canEditLectures ? 'checked' : ''} class="w-4 h-4 accent-[#0071E3]" />
+              <span>إضافة وتعديل المحاضرات والفيديوهات</span>
+            </label>
+            <label class="flex items-center gap-2.5 text-sm cursor-pointer">
+              <input type="checkbox" id="edit-perm-exams" ${t.permissions?.canManageExams ? 'checked' : ''} class="w-4 h-4 accent-[#0071E3]" />
+              <span>إنشاء وتصحيح الامتحانات</span>
+            </label>
+          </div>
+          <div class="flex justify-end gap-2 mt-5">
+            <button onclick="closeModal()" class="px-4 py-2 rounded-xl bg-[#F5F5F7] text-xs font-bold">إلغاء</button>
+            <button onclick="saveTeacherPerms('${t.id}')" class="px-5 py-2 rounded-xl bg-[#0071E3] text-white text-xs font-bold">حفظ التعديلات</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function saveTeacherPerms(teacherId) {
+      const t = db.users.find(u => u.id === teacherId);
+      if (!t) return;
+      t.permissions = {
+        canCreateCourse: document.getElementById('edit-perm-create').checked,
+        canEditLectures: document.getElementById('edit-perm-lectures').checked,
+        canManageExams: document.getElementById('edit-perm-exams').checked
+      };
+      saveDB();
+      closeModal();
+      showToast('تم تحديث صلاحيات المدرس بنجاح', 'success');
+      renderAdminDashboard();
+    }
+
+    function toggleUserStatus(userId) {
+      const u = db.users.find(user => user.id === userId);
+      if (!u) return;
+      u.status = u.status === 'active' ? 'suspended' : 'active';
+      saveDB();
+      showToast(`تم تغيير حالة الحساب إلى: ${u.status === 'active' ? 'نشط' : 'موقوف'}`, 'info');
+      renderAdminDashboard();
+    }
+
+    function openCourseModal(courseId = null, forceTeacherId = null) {
+      const course = courseId ? db.courses.find(c => c.id === courseId) : null;
+      const teachers = db.users.filter(u => u.role === 'teacher');
+
+      openModal(`
+        <div class="p-6">
+          <div class="flex items-center justify-between pb-4 border-b border-black/5">
+            <h3 class="font-display font-bold text-lg">${course ? 'تعديل بيانات الكورس' : 'إنشاء كورس تعليمي جديد'}</h3>
+            <button onclick="closeModal()" class="p-1.5 rounded-lg hover:bg-black/5"><i data-lucide="x" class="w-5 h-5"></i></button>
+          </div>
+          <form onsubmit="saveCourseForm(event, '${course ? course.id : ''}', '${forceTeacherId || ''}')" class="space-y-4 mt-4">
+            <div>
+              <label class="block text-xs font-semibold mb-1">عنوان الكورس</label>
+              <input type="text" id="c-title" required value="${course ? course.title : ''}" placeholder="مثال: تطوير تطبيقات الويب المتكاملة" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">وصف الكورس</label>
+              <textarea id="c-desc" rows="2" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none">${course ? course.description : ''}</textarea>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold mb-1">التصنيف</label>
+                <input type="text" id="c-cat" required value="${course ? course.category : 'البرمجة والتقنية'}" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">المدرس المسؤول</label>
+                <select id="c-teacher" ${forceTeacherId ? 'disabled' : ''} class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none">
+                  ${teachers.map(t => `<option value="${t.id}" ${(course && course.teacherId === t.id) || forceTeacherId === t.id ? 'selected' : ''}>${t.name}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3.5 rounded-2xl bg-[#F5F5F7]">
+              <div>
+                <label class="block text-xs font-semibold mb-1">نظام الوصول والتسعير</label>
+                <select id="c-free" class="w-full px-3 py-2 rounded-xl bg-white text-sm outline-none">
+                  <option value="false" ${course && !course.isFree ? 'selected' : ''}>مدفوع (يتطلب كود اشتراك)</option>
+                  <option value="true" ${course && course.isFree ? 'selected' : ''}>مجاني (متاح للجميع)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">حالة النشر</label>
+                <select id="c-pub" class="w-full px-3 py-2 rounded-xl bg-white text-sm outline-none">
+                  <option value="true" ${!course || course.published ? 'selected' : ''}>منشور للطلاب</option>
+                  <option value="false" ${course && !course.published ? 'selected' : ''}>غير منشور (مسودة)</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-[#F5F5F7] text-xs font-bold">إلغاء</button>
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#0071E3] text-white text-xs font-bold">حفظ الكورس</button>
+            </div>
+          </form>
+        </div>
+      `);
+    }
+
+    function saveCourseForm(e, courseId, forceTeacherId) {
+      e.preventDefault();
+      const title = document.getElementById('c-title').value.trim();
+      const description = document.getElementById('c-desc').value.trim();
+      const category = document.getElementById('c-cat').value.trim();
+      const teacherId = forceTeacherId || document.getElementById('c-teacher').value;
+      const isFree = document.getElementById('c-free').value === 'true';
+      const published = document.getElementById('c-pub').value === 'true';
+
+      const gradients = [
+        'from-[#0071E3] via-[#2997FF] to-[#5AC8FA]',
+        'from-[#34C759] via-[#30B0C7] to-[#0071E3]',
+        'from-[#AF52DE] via-[#5856D6] to-[#0071E3]',
+        'from-[#FF9500] via-[#FF3B30] to-[#AF52DE]'
+      ];
+
+      if (courseId) {
+        const c = db.courses.find(item => item.id === courseId);
+        if (c) {
+          c.title = title;
+          c.description = description;
+          c.category = category;
+          c.teacherId = teacherId;
+          c.isFree = isFree;
+          c.published = published;
+        }
+        showToast('تم تحديث بيانات الكورس بنجاح', 'success');
+      } else {
+        db.courses.push({
+          id: 'c-' + Date.now(),
+          title,
+          description,
+          category,
+          teacherId,
+          isFree,
+          published,
+          coverGradient: gradients[db.courses.length % gradients.length],
+          lectures: []
+        });
+        showToast('تم إنشاء الكورس بنجاح', 'success');
+      }
+
+      saveDB();
+      closeModal();
+      renderApp();
+    }
+
+    function toggleCoursePublish(courseId) {
+      const c = db.courses.find(item => item.id === courseId);
+      if (!c) return;
+      c.published = !c.published;
+      saveDB();
+      showToast(c.published ? 'تم نشر الكورس للطلاب' : 'تم إلغاء نشر الكورس', 'info');
+      renderAdminDashboard();
+    }
+
+    function deleteCourse(courseId) {
+      db.courses = db.courses.filter(c => c.id !== courseId);
+      saveDB();
+      showToast('تم حذف الكورس من المنصة', 'info');
+      renderAdminDashboard();
+    }
+
+    function openGenerateCodesModal() {
+      const paidCourses = db.courses;
+      openModal(`
+        <div class="p-6">
+          <div class="flex items-center justify-between pb-4 border-b border-black/5">
+            <h3 class="font-display font-bold text-lg">توليد أكواد اشتراك جديدة</h3>
+            <button onclick="closeModal()" class="p-1.5 rounded-lg hover:bg-black/5"><i data-lucide="x" class="w-5 h-5"></i></button>
+          </div>
+          <form onsubmit="submitGenerateCodes(event)" class="space-y-4 mt-4">
+            <div>
+              <label class="block text-xs font-semibold mb-1">اختر الكورس المرتبط بالكود</label>
+              <select id="code-course-id" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none">
+                ${paidCourses.map(c => `<option value="${c.id}">${c.title} ${c.isFree ? '(مجاني حاليًا)' : ''}</option>`).join('')}
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold mb-1">عدد الأكواد المطلوبة</label>
+                <input type="number" id="code-count" min="1" max="50" value="3" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">بادئة الكود (Prefix)</label>
+                <input type="text" id="code-prefix" value="OFOQ" maxlength="6" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm font-mono uppercase outline-none" />
+              </div>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-[#F5F5F7] text-xs font-bold">إلغاء</button>
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#0071E3] text-white text-xs font-bold">توليد الأكواد الآن</button>
+            </div>
+          </form>
+        </div>
+      `);
+    }
+
+    function submitGenerateCodes(e) {
+      e.preventDefault();
+      const courseId = document.getElementById('code-course-id').value;
+      const count = parseInt(document.getElementById('code-count').value, 10) || 1;
+      const prefix = (document.getElementById('code-prefix').value || 'OFOQ').toUpperCase().trim();
+
+      for (let i = 0; i < count; i++) {
+        const rand = Math.random().toString(36).substring(2, 7).toUpperCase();
+        db.subscriptionCodes.unshift({
+          code: `${prefix}-${rand}-${100 + i}`,
+          courseId,
+          used: false,
+          usedByUserId: null,
+          usedAt: null,
+          createdAt: new Date().toISOString().slice(0, 10)
+        });
+      }
+      saveDB();
+      closeModal();
+      showToast(`تم توليد ${count} أكواد اشتراك بنجاح!`, 'success');
+      renderAdminDashboard();
+    }
+
+    function copyTextToClipboard(text) {
+      const el = document.createElement('textarea');
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      showToast(`تم نسخ الكود: ${text}`, 'success');
+    }
+
+    // =========================================================================
+    // 5. TEACHER DASHBOARD MODULE (لوحة تحكم المدرس)
+    // =========================================================================
+    function renderTeacherDashboard() {
+      if (!enforceRLS('teacher')) return;
+      const app = document.getElementById('app-container');
+
+      // RLS Filter: Teacher only sees courses assigned to them
+      const myCourses = db.courses.filter(c => c.teacherId === currentUser.id);
+      const perms = currentUser.permissions || {};
+
+      // Essay submissions for this teacher's courses
+      const myCourseIds = myCourses.map(c => c.id);
+      const essaySubs = db.examSubmissions.filter(s => myCourseIds.includes(s.courseId) && s.essayAnswers && s.essayAnswers.length > 0);
+
+      let contentHtml = '';
+
+      if (teacherTab === 'courses' && !selectedTeacherCourseId) {
+        contentHtml = `
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+            <div>
+              <h2 class="font-display font-bold text-xl">الكورسات المسندة إليك (${myCourses.length})</h2>
+              <p class="text-xs text-[#6E6E73] mt-0.5">إدارة المحاضرات، الفصول الزمنية (Chapters)، والامتحانات وفق صلاحياتك</p>
+            </div>
+            ${perms.canCreateCourse
+              ? `<button onclick="openCourseModal(null, '${currentUser.id}')" class="px-4 py-2.5 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-semibold flex items-center gap-2 shadow-sm">
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                  إنشاء كورس جديد
+                </button>`
+              : `<span class="text-xs px-3 py-1.5 rounded-xl bg-amber-50 text-amber-700 font-medium">صلاحية إنشاء الكورسات مقيدة من الإدارة</span>`
+            }
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${myCourses.map(course => `
+              <div class="apple-card apple-card-hover overflow-hidden flex flex-col justify-between">
+                <div>
+                  <div class="h-32 bg-gradient-to-l ${course.coverGradient} p-5 flex flex-col justify-between text-white">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-black/25">${course.isFree ? 'مجاني' : 'مدفوع بكود'}</span>
+                      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${course.published ? 'bg-emerald-500' : 'bg-amber-500'}">${course.published ? 'منشور' : 'مسودة'}</span>
+                    </div>
+                    <span class="text-xs font-medium text-white/90">${course.category}</span>
+                  </div>
+                  <div class="p-5">
+                    <h3 class="font-display font-bold text-lg text-[#1D1D1F]">${course.title}</h3>
+                    <p class="text-xs text-[#6E6E73] mt-1.5 line-clamp-2">${course.description}</p>
+                  </div>
+                </div>
+                <div class="p-4 bg-[#F5F5F7] border-t border-black/5 flex items-center justify-between">
+                  <span class="text-xs font-bold text-[#6E6E73]">${course.lectures.length} محاضرات</span>
+                  <button onclick="selectedTeacherCourseId='${course.id}'; renderTeacherDashboard();" class="px-4 py-2 rounded-xl bg-[#0071E3] text-white text-xs font-semibold hover:bg-[#0077ED] transition">
+                    إدارة المحتوى والامتحانات
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (teacherTab === 'courses' && selectedTeacherCourseId) {
+        const course = myCourses.find(c => c.id === selectedTeacherCourseId);
+        if (!course) {
+          selectedTeacherCourseId = null;
+          renderTeacherDashboard();
+          return;
+        }
+
+        contentHtml = `
+          <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+            <button onclick="selectedTeacherCourseId=null; renderTeacherDashboard();" class="inline-flex items-center gap-2 text-sm font-semibold text-[#0071E3] hover:underline">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              العودة إلى قائمة الكورسات
+            </button>
+            ${perms.canEditLectures
+              ? `<button onclick="openLectureModal('${course.id}')" class="px-4 py-2.5 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-semibold flex items-center gap-2 shadow-sm">
+                  <i data-lucide="video" class="w-4 h-4"></i>
+                  إضافة محاضرة جديدة
+                </button>`
+              : ''
+            }
+          </div>
+
+          <div class="apple-card p-6 mb-6">
+            <h2 class="font-display font-extrabold text-xl text-[#1D1D1F]">${course.title}</h2>
+            <p class="text-sm text-[#6E6E73] mt-1">${course.description}</p>
+          </div>
+
+          <div class="space-y-4">
+            ${course.lectures.length === 0 ? `
+              <div class="apple-card p-10 text-center">
+                <p class="text-sm text-[#6E6E73]">لا توجد محاضرات مضافة في هذا الكورس بعد. ابدأ بإضافة أول محاضرة!</p>
+              </div>
+            ` : course.lectures.map((lec, idx) => `
+              <div class="apple-card p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="space-y-1.5">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="px-2.5 py-0.5 rounded-lg bg-blue-50 text-[#0071E3] text-xs font-bold">محاضرة ${idx + 1}</span>
+                    <span class="text-xs text-[#6E6E73] font-medium">${lec.unit || 'الوحدة الرئيسية'}</span>
+                    <span class="text-xs text-[#6E6E73]">• المدة: ${lec.duration}</span>
+                  </div>
+                  <h3 class="font-display font-bold text-base text-[#1D1D1F]">${lec.title}</h3>
+                  <div class="flex flex-wrap items-center gap-3 text-xs text-[#6E6E73] pt-1">
+                    <span class="inline-flex items-center gap-1"><i data-lucide="list-ordered" class="w-3.5 h-3.5 text-[#0071E3]"></i> ${lec.chapters?.length || 0} فصول (Chapters)</span>
+                    <span class="inline-flex items-center gap-1"><i data-lucide="bookmark" class="w-3.5 h-3.5 text-amber-500"></i> ${lec.moments?.length || 0} لحظات مهمة (Moments)</span>
+                    <span class="inline-flex items-center gap-1"><i data-lucide="file-text" class="w-3.5 h-3.5 text-rose-500"></i> ${lec.pdfName || 'بدون ملف PDF'}</span>
+                    <span class="inline-flex items-center gap-1 font-semibold ${lec.exam ? 'text-emerald-600' : 'text-gray-400'}">
+                      <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i>
+                      ${lec.exam ? `امتحان مرتبط (${lec.exam.questions.length} أسئلة)` : 'لا يوجد امتحان'}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 shrink-0">
+                  ${perms.canEditLectures ? `
+                    <button onclick="openLectureModal('${course.id}', '${lec.id}')" class="px-3.5 py-2 rounded-xl bg-[#F5F5F7] hover:bg-blue-50 hover:text-[#0071E3] text-xs font-semibold transition">
+                      تعديل المحاضرة
+                    </button>
+                  ` : ''}
+                  ${perms.canManageExams ? `
+                    <button onclick="openExamBuilderModal('${course.id}', '${lec.id}')" class="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold transition flex items-center gap-1.5">
+                      <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i>
+                      ${lec.exam ? 'تعديل الامتحان' : 'إضافة امتحان'}
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (teacherTab === 'essays') {
+        contentHtml = `
+          <div class="apple-card p-6">
+            <h3 class="font-display font-bold text-lg mb-1">تصحيح الأسئلة المقالية للطلاب</h3>
+            <p class="text-xs text-[#6E6E73] mb-5">مراجعة إجابات الطلاب المقالية ورصد الدرجات النهائية</p>
+
+            ${essaySubs.length === 0 ? `<p class="text-sm text-[#6E6E73] py-6 text-center">لا توجد إجابات مقالية مقدمة حتى الآن.</p>` : `
+              <div class="space-y-4">
+                ${essaySubs.map(sub => {
+                  const student = db.users.find(u => u.id === sub.userId);
+                  const course = db.courses.find(c => c.id === sub.courseId);
+                  return `
+                    <div class="p-4 rounded-2xl bg-[#F5F5F7] space-y-3">
+                      <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <span class="font-bold text-sm text-[#1D1D1F]">${student ? student.name : 'طالب'}</span>
+                          <span class="text-xs text-[#6E6E73] mr-2">• ${course ? course.title : ''}</span>
+                        </div>
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-white">الدرجة الحالية: ${sub.totalScore}%</span>
+                      </div>
+                      ${sub.essayAnswers.map((ea, i) => `
+                        <div class="p-3.5 rounded-xl bg-white border border-black/5 space-y-2">
+                          <div class="text-xs font-bold text-[#0071E3]">السؤال المقالي: ${ea.questionText}</div>
+                          <div class="text-sm text-[#1D1D1F] bg-[#F5F5F7] p-3 rounded-lg">${ea.studentAnswer || 'لم يكتب الطالب إجابة'}</div>
+                          <div class="flex items-center gap-2 pt-1">
+                            <label class="text-xs font-semibold">تقييم المدرس (من 100):</label>
+                            <input type="number" id="grade-${sub.id}-${i}" min="0" max="100" value="${ea.teacherGrade ?? 85}" class="w-20 px-2.5 py-1 rounded-lg bg-[#F5F5F7] text-xs font-bold" />
+                            <button onclick="gradeEssaySubmission('${sub.id}', ${i})" class="px-3 py-1.5 rounded-lg bg-[#34C759] text-white text-xs font-bold">اعتماد الدرجة</button>
+                          </div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `}
+          </div>
+        `;
+      }
+
+      app.innerHTML = `
+        <div class="animate-view">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-display font-extrabold text-[#1D1D1F]">لوحة تحكم المدرس</h1>
+              <p class="text-sm text-[#6E6E73] mt-1">مرحباً ${currentUser.name} • التخصص: ${currentUser.specialty || 'التعليم الإلكتروني'}</p>
+            </div>
+            <div class="segmented-bg inline-flex gap-1">
+              <button onclick="teacherTab='courses'; renderTeacherDashboard();" class="px-4 py-2 rounded-xl text-xs font-bold transition ${teacherTab==='courses' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73]'}">الكورسات والمحاضرات</button>
+              <button onclick="teacherTab='essays'; renderTeacherDashboard();" class="px-4 py-2 rounded-xl text-xs font-bold transition ${teacherTab==='essays' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73]'}">تصحيح الأسئلة المقالية</button>
+            </div>
+          </div>
+          ${contentHtml}
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    // Lecture Editor Modal (Video URL, PDF, Chapters, Moments)
+    function openLectureModal(courseId, lectureId = null) {
+      const course = db.courses.find(c => c.id === courseId);
+      if (!course) return;
+      const lec = lectureId ? course.lectures.find(l => l.id === lectureId) : null;
+
+      const chaptersText = lec && lec.chapters ? lec.chapters.map(c => `${c.time}|${c.title}`).join('\n') : '0|مقدمة المحاضرة\n15|المحور الرئيسي الأول\n35|الخلاصة والتطبيق';
+      const momentsText = lec && lec.moments ? lec.moments.map(m => `${m.time}|${m.label}`).join('\n') : '12|نقطة هامة جدًا للامتحان\n28|مثال تطبيقي عملي';
+
+      openModal(`
+        <div class="p-6 max-h-[88vh] overflow-y-auto">
+          <div class="flex items-center justify-between pb-4 border-b border-black/5">
+            <h3 class="font-display font-bold text-lg">${lec ? 'تعديل بيانات المحاضرة' : 'إضافة محاضرة جديدة'}</h3>
+            <button onclick="closeModal()" class="p-1.5 rounded-lg hover:bg-black/5"><i data-lucide="x" class="w-5 h-5"></i></button>
+          </div>
+
+          <form onsubmit="saveLectureForm(event, '${courseId}', '${lec ? lec.id : ''}')" class="space-y-4 mt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold mb-1">عنوان المحاضرة</label>
+                <input type="text" id="l-title" required value="${lec ? lec.title : ''}" placeholder="مثال: شرح الدوال المتقدمة" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">اسم الوحدة التعليمية</label>
+                <input type="text" id="l-unit" required value="${lec ? lec.unit : 'الوحدة الأولى'}" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold mb-1">رابط الفيديو المستضاف (MP4)</label>
+                <input type="url" id="l-video" required value="${lec ? lec.videoUrl : SAMPLE_VIDEOS[0].url}" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-xs font-mono outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">مدة المحاضرة</label>
+                <input type="text" id="l-duration" required value="${lec ? lec.duration : '14:00'}" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold mb-1">اسم ملف الـ PDF المرفق (مادة تعليمية)</label>
+              <input type="text" id="l-pdf" value="${lec ? lec.pdfName : 'ملخص_المحاضرة_PDF.pdf'}" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold mb-1">ملاحظات وشرح المحاضرة</label>
+              <textarea id="l-notes" rows="2" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none">${lec ? lec.notes : ''}</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold mb-1">فصول الفيديو Chapters (الثانية|العنوان)</label>
+                <textarea id="l-chapters" rows="3" class="w-full px-3 py-2 rounded-xl bg-[#F5F5F7] text-xs font-mono outline-none">${chaptersText}</textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">اللحظات المهمة Moments (الثانية|الوصف)</label>
+                <textarea id="l-moments" rows="3" class="w-full px-3 py-2 rounded-xl bg-[#F5F5F7] text-xs font-mono outline-none">${momentsText}</textarea>
+              </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-[#F5F5F7] text-xs font-bold">إلغاء</button>
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#0071E3] text-white text-xs font-bold">حفظ المحاضرة</button>
+            </div>
+          </form>
+        </div>
+      `);
+    }
+
+    function parseTimelineLines(raw, keyName) {
+      return raw.split('\n').map(line => line.trim()).filter(Boolean).map(line => {
+        const [sec, ...rest] = line.split('|');
+        return {
+          time: parseInt(sec, 10) || 0,
+          [keyName]: rest.join('|').trim() || 'نقطة زمنية'
+        };
+      });
+    }
+
+    function saveLectureForm(e, courseId, lectureId) {
+      e.preventDefault();
+      const course = db.courses.find(c => c.id === courseId);
+      if (!course) return;
+
+      const data = {
+        title: document.getElementById('l-title').value.trim(),
+        unit: document.getElementById('l-unit').value.trim(),
+        videoUrl: document.getElementById('l-video').value.trim(),
+        duration: document.getElementById('l-duration').value.trim(),
+        pdfName: document.getElementById('l-pdf').value.trim(),
+        pdfUrl: '#pdf-attachment',
+        notes: document.getElementById('l-notes').value.trim(),
+        chapters: parseTimelineLines(document.getElementById('l-chapters').value, 'title'),
+        moments: parseTimelineLines(document.getElementById('l-moments').value, 'label')
+      };
+
+      if (lectureId) {
+        const lec = course.lectures.find(l => l.id === lectureId);
+        if (lec) Object.assign(lec, data);
+        showToast('تم تحديث المحاضرة بنجاح', 'success');
+      } else {
+        course.lectures.push({
+          id: 'lec-' + Date.now(),
+          ...data,
+          exam: null
+        });
+        showToast('تمت إضافة المحاضرة الجديدة للكورس', 'success');
+      }
+
+      saveDB();
+      closeModal();
+      renderTeacherDashboard();
+    }
+
+    // Exam Builder Modal (MCQ + Essay + Gate Next Lecture)
+    let tempExamQuestions = [];
+
+    function openExamBuilderModal(courseId, lectureId) {
+      const course = db.courses.find(c => c.id === courseId);
+      const lec = course ? course.lectures.find(l => l.id === lectureId) : null;
+      if (!lec) return;
+
+      tempExamQuestions = lec.exam ? JSON.parse(JSON.stringify(lec.exam.questions)) : [
+        {
+          id: 'q-' + Date.now(),
+          type: 'mcq',
+          text: '',
+          options: ['', '', '', ''],
+          correctIndex: 0
+        }
+      ];
+
+      renderExamBuilderUI(courseId, lectureId, lec);
+    }
+
+    function renderExamBuilderUI(courseId, lectureId, lec) {
+      const existingExam = lec.exam;
+      openModal(`
+        <div class="p-6 max-h-[88vh] overflow-y-auto">
+          <div class="flex items-center justify-between pb-4 border-b border-black/5">
+            <div>
+              <h3 class="font-display font-bold text-lg">منشئ الامتحانات التفاعلي</h3>
+              <p class="text-xs text-[#6E6E73]">المحاضرة: ${lec.title}</p>
+            </div>
+            <button onclick="closeModal()" class="p-1.5 rounded-lg hover:bg-black/5"><i data-lucide="x" class="w-5 h-5"></i></button>
+          </div>
+
+          <div class="space-y-4 mt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold mb-1">عنوان الامتحان</label>
+                <input type="text" id="ex-title" value="${existingExam ? existingExam.title : 'اختبار تقييم: ' + lec.title}" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">نسبة النجاح المطلوبة (%)</label>
+                <input type="number" id="ex-pass" min="10" max="100" value="${existingExam ? existingExam.passScore : 70}" class="w-full px-3.5 py-2.5 rounded-xl bg-[#F5F5F7] text-sm outline-none" />
+              </div>
+            </div>
+
+            <label class="flex items-center gap-2.5 p-3.5 rounded-2xl bg-amber-50 border border-amber-200/60 text-xs font-semibold text-amber-900 cursor-pointer">
+              <input type="checkbox" id="ex-gate" ${!existingExam || existingExam.requirePassToUnlockNext ? 'checked' : ''} class="w-4 h-4 accent-[#0071E3]" />
+              <span>اشتراط اجتياز هذا الامتحان لفتح المحاضرة التالية للطالب (Content Locking)</span>
+            </label>
+
+            <div id="exam-questions-list" class="space-y-4">
+              ${tempExamQuestions.map((q, idx) => `
+                <div class="p-4 rounded-2xl bg-[#F5F5F7] border border-black/5 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#0071E3]">سؤال ${idx + 1} (${q.type === 'mcq' ? 'اختيار من متعدد' : 'سؤال مقالي'})</span>
+                    <button type="button" onclick="removeTempQuestion(${idx}, '${courseId}', '${lectureId}')" class="text-xs text-rose-600 hover:underline">حذف</button>
+                  </div>
+                  <input type="text" oninput="tempExamQuestions[${idx}].text = this.value" value="${q.text}" placeholder="اكتب نص السؤال هنا..." class="w-full px-3 py-2 rounded-xl bg-white text-sm outline-none" />
+                  ${q.type === 'mcq' ? `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      ${[0,1,2,3].map(optIdx => `
+                        <div class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-xl border ${q.correctIndex === optIdx ? 'border-emerald-500' : 'border-transparent'}">
+                          <input type="radio" name="correct-${idx}" ${q.correctIndex === optIdx ? 'checked' : ''} onchange="tempExamQuestions[${idx}].correctIndex = ${optIdx}" />
+                          <input type="text" oninput="tempExamQuestions[${idx}].options[${optIdx}] = this.value" value="${q.options[optIdx] || ''}" placeholder="${optIdx === 0 ? 'الإجابة الصحيحة' : 'خيار خاطئ ' + optIdx}" class="w-full text-xs outline-none" />
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : `<p class="text-[11px] text-[#6E6E73]">سيظهر للطالب مربع نصي لكتابة إجابته المقالية وتُرسل للمدرس للتصحيح.</p>`}
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="addTempQuestion('mcq', '${courseId}', '${lectureId}')" class="px-3.5 py-2 rounded-xl bg-blue-50 text-[#0071E3] text-xs font-bold hover:bg-blue-100">
+                + إضافة سؤال اختيار من متعدد (MCQ)
+              </button>
+              <button type="button" onclick="addTempQuestion('essay', '${courseId}', '${lectureId}')" class="px-3.5 py-2 rounded-xl bg-purple-50 text-purple-700 text-xs font-bold hover:bg-purple-100">
+                + إضافة سؤال مقالي (Essay)
+              </button>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-3 border-t border-black/5">
+              <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-[#F5F5F7] text-xs font-bold">إلغاء</button>
+              <button type="button" onclick="saveExamBuilder('${courseId}', '${lectureId}')" class="px-5 py-2.5 rounded-xl bg-[#34C759] text-white text-xs font-bold">حفظ واعتماد الامتحان</button>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+
+    function addTempQuestion(type, courseId, lectureId) {
+      const course = db.courses.find(c => c.id === courseId);
+      const lec = course.lectures.find(l => l.id === lectureId);
+      tempExamQuestions.push(type === 'mcq'
+        ? { id: 'q-' + Date.now(), type: 'mcq', text: '', options: ['', '', '', ''], correctIndex: 0 }
+        : { id: 'q-' + Date.now(), type: 'essay', text: '' }
+      );
+      renderExamBuilderUI(courseId, lectureId, lec);
+    }
+
+    function removeTempQuestion(idx, courseId, lectureId) {
+      const course = db.courses.find(c => c.id === courseId);
+      const lec = course.lectures.find(l => l.id === lectureId);
+      tempExamQuestions.splice(idx, 1);
+      renderExamBuilderUI(courseId, lectureId, lec);
+    }
+
+    function saveExamBuilder(courseId, lectureId) {
+      const course = db.courses.find(c => c.id === courseId);
+      const lec = course.lectures.find(l => l.id === lectureId);
+      const validQuestions = tempExamQuestions.filter(q => q.text.trim() !== '');
+      if (validQuestions.length === 0) {
+        showToast('يرجى إضافة سؤال واحد على الأقل بنص صحيح', 'error');
+        return;
+      }
+      lec.exam = {
+        id: lec.exam ? lec.exam.id : 'ex-' + Date.now(),
+        title: document.getElementById('ex-title').value.trim() || 'امتحان المحاضرة',
+        passScore: parseInt(document.getElementById('ex-pass').value, 10) || 60,
+        requirePassToUnlockNext: document.getElementById('ex-gate').checked,
+        questions: validQuestions
+      };
+      saveDB();
+      closeModal();
+      showToast('تم حفظ الامتحان وربطه بالمحاضرة بنجاح!', 'success');
+      renderTeacherDashboard();
+    }
+
+    function gradeEssaySubmission(subId, essayIdx) {
+      const sub = db.examSubmissions.find(s => s.id === subId);
+      if (!sub) return;
+      const val = parseInt(document.getElementById(`grade-${subId}-${essayIdx}`).value, 10) || 0;
+      sub.essayAnswers[essayIdx].teacherGrade = Math.min(100, Math.max(0, val));
+      sub.essayAnswers[essayIdx].graded = true;
+      sub.totalScore = Math.round((sub.mcqScore + sub.essayAnswers[essayIdx].teacherGrade) / 2);
+      saveDB();
+      showToast('تم اعتماد درجة السؤال المقالي وتحديث النتيجة النهائية', 'success');
+      renderTeacherDashboard();
+    }
+
+    // =========================================================================
+    // 6. STUDENT DASHBOARD, CUSTOM VIDEO PLAYER & EXAM ENGINE
+    // =========================================================================
+    function isStudentEnrolled(courseId) {
+      return db.enrollments.some(e => e.userId === currentUser.id && e.courseId === courseId);
+    }
+
+    function getStudentEnrollment(courseId) {
+      return db.enrollments.find(e => e.userId === currentUser.id && e.courseId === courseId);
+    }
+
+    function isLectureUnlocked(course, lectureIndex) {
+      if (lectureIndex === 0) return true;
+      const prevLecture = course.lectures[lectureIndex - 1];
+      if (!prevLecture || !prevLecture.exam || !prevLecture.exam.requirePassToUnlockNext) {
+        return true;
+      }
+      // Check if student passed prevLecture's exam
+      const passedSub = db.examSubmissions.find(s =>
+        s.userId === currentUser.id &&
+        s.courseId === course.id &&
+        s.lectureId === prevLecture.id &&
+        s.passed === true
+      );
+      return Boolean(passedSub);
+    }
+
+    function renderStudentDashboard() {
+      if (!enforceRLS('student')) return;
+      const app = document.getElementById('app-container');
+
+      if (studentTab === 'player' && activeCourseId) {
+        renderStudentCoursePlayer();
+        return;
+      }
+
+      const publishedCourses = db.courses.filter(c => c.published);
+      const filteredCourses = publishedCourses.filter(c => {
+        if (studentCourseFilter === 'enrolled') return isStudentEnrolled(c.id);
+        if (studentCourseFilter === 'free') return c.isFree;
+        if (studentCourseFilter === 'paid') return !c.isFree;
+        return true;
+      });
+
+      const mySubmissions = db.examSubmissions.filter(s => s.userId === currentUser.id);
+
+      let mainSection = '';
+
+      if (studentTab === 'catalog') {
+        mainSection = `
+          <!-- Filter Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+            <div class="segmented-bg inline-flex flex-wrap gap-1">
+              <button onclick="studentCourseFilter='all'; renderStudentDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${studentCourseFilter==='all' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73]'}">جميع الكورسات</button>
+              <button onclick="studentCourseFilter='enrolled'; renderStudentDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${studentCourseFilter==='enrolled' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73]'}">كورساتي المشترك بها</button>
+              <button onclick="studentCourseFilter='free'; renderStudentDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${studentCourseFilter==='free' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73]'}">المجانية</button>
+              <button onclick="studentCourseFilter='paid'; renderStudentDashboard();" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${studentCourseFilter==='paid' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73]'}">المتاحة بكود اشتراك</button>
+            </div>
+
+            <button onclick="openRedeemCodeModal()" class="px-4 py-2.5 rounded-xl bg-[#1D1D1F] hover:bg-black text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+              <i data-lucide="key" class="w-4 h-4 text-amber-400"></i>
+              تفعيل كود اشتراك
+            </button>
+          </div>
+
+          <!-- Course Cards Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${filteredCourses.map(course => {
+              const teacher = db.users.find(u => u.id === course.teacherId);
+              const enrolled = isStudentEnrolled(course.id);
+              const enrollment = getStudentEnrollment(course.id);
+              const progressPct = enrolled && course.lectures.length > 0
+                ? Math.round((enrollment.completedLectures.length / course.lectures.length) * 100)
+                : 0;
+
+              return `
+                <div class="apple-card apple-card-hover overflow-hidden flex flex-col justify-between">
+                  <div>
+                    <div class="h-36 bg-gradient-to-l ${course.coverGradient} p-5 flex flex-col justify-between text-white relative">
+                      <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-black/25 backdrop-blur-md">
+                          ${course.isFree ? 'مجاني' : 'كود اشتراك'}
+                        </span>
+                        ${enrolled ? `<span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white shadow-sm">مشترك ✓</span>` : ''}
+                      </div>
+                      <div>
+                        <span class="text-xs text-white/90 font-medium">${course.category}</span>
+                      </div>
+                    </div>
+
+                    <div class="p-5">
+                      <h3 class="font-display font-bold text-lg text-[#1D1D1F] leading-snug">${course.title}</h3>
+                      <p class="text-xs text-[#6E6E73] mt-2 line-clamp-2 leading-relaxed">${course.description}</p>
+
+                      <div class="mt-4 pt-3 border-t border-black/5 flex items-center justify-between text-xs text-[#6E6E73]">
+                        <span class="flex items-center gap-1.5">
+                          <i data-lucide="user-check" class="w-3.5 h-3.5 text-[#0071E3]"></i>
+                          ${teacher ? teacher.name : 'المدرس'}
+                        </span>
+                        <span>${course.lectures.length} محاضرات</span>
+                      </div>
+
+                      ${enrolled ? `
+                        <div class="mt-3">
+                          <div class="flex justify-between text-[11px] font-semibold mb-1">
+                            <span class="text-[#6E6E73]">التقدم التعليمي</span>
+                            <span class="text-[#34C759]">${progressPct}%</span>
+                          </div>
+                          <div class="w-full h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                            <div class="h-full bg-[#34C759] transition-all duration-500" style="width: ${progressPct}%"></div>
+                          </div>
+                        </div>
+                      ` : ''}
+                    </div>
+                  </div>
+
+                  <div class="p-4 bg-[#F5F5F7] border-t border-black/5">
+                    ${enrolled ? `
+                      <button onclick="enterCoursePlayer('${course.id}')" class="w-full py-3 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white font-semibold text-xs shadow-sm transition flex items-center justify-center gap-2">
+                        <i data-lucide="play-circle" class="w-4 h-4"></i>
+                        متابعة التعلم والمحاضرات
+                      </button>
+                    ` : course.isFree ? `
+                      <button onclick="enrollFreeCourse('${course.id}')" class="w-full py-3 rounded-xl bg-[#34C759] hover:opacity-95 text-white font-semibold text-xs shadow-sm transition flex items-center justify-center gap-2">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        اشترك مجاناً الآن
+                      </button>
+                    ` : `
+                      <button onclick="openRedeemCodeModal('${course.id}')" class="w-full py-3 rounded-xl bg-[#1D1D1F] hover:bg-black text-white font-semibold text-xs shadow-sm transition flex items-center justify-center gap-2">
+                        <i data-lucide="lock" class="w-4 h-4 text-amber-400"></i>
+                        أدخل كود الاشتراك لفتح الكورس
+                      </button>
+                    `}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      } else if (studentTab === 'grades') {
+        mainSection = `
+          <div class="apple-card p-6">
+            <h3 class="font-display font-bold text-lg mb-1">سجل نتائج الامتحانات والأداء الأكاديمي</h3>
+            <p class="text-xs text-[#6E6E73] mb-5">جميع محاولاتك في الاختبارات وحالة الاجتياز</p>
+
+            ${mySubmissions.length === 0 ? `
+              <div class="text-center py-10 text-sm text-[#6E6E73]">
+                لم تقم بأداء أي امتحان حتى الآن. ابدأ بمشاهدة المحاضرات واجتياز اختباراتها!
+              </div>
+            ` : `
+              <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                  <thead>
+                    <tr class="border-b border-black/5 text-xs text-[#6E6E73]">
+                      <th class="py-3 px-3">الكورس</th>
+                      <th class="py-3 px-3">المحاضرة</th>
+                      <th class="py-3 px-3">الدرجة المحققة</th>
+                      <th class="py-3 px-3">الحالة</th>
+                      <th class="py-3 px-3">تاريخ التقديم</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-black/5 text-sm">
+                    ${mySubmissions.map(sub => {
+                      const course = db.courses.find(c => c.id === sub.courseId);
+                      const lec = course ? course.lectures.find(l => l.id === sub.lectureId) : null;
+                      return `
+                        <tr class="hover:bg-black/[0.015]">
+                          <td class="py-3.5 px-3 font-bold text-xs">${course ? course.title : 'كورس'}</td>
+                          <td class="py-3.5 px-3 text-xs">${lec ? lec.title : 'محاضرة'}</td>
+                          <td class="py-3.5 px-3 font-extrabold text-sm ${sub.passed ? 'text-emerald-600' : 'text-rose-600'}">${sub.totalScore}%</td>
+                          <td class="py-3.5 px-3">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${sub.passed ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-600'}">
+                              ${sub.passed ? 'ناجح (مُجتاز)' : 'لم يجتز'}
+                            </span>
+                          </td>
+                          <td class="py-3.5 px-3 text-xs text-[#6E6E73]">${sub.submittedAt}</td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            `}
+          </div>
+        `;
+      }
+
+      app.innerHTML = `
+        <div class="animate-view">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 class="text-2xl sm:text-3xl font-display font-extrabold text-[#1D1D1F]">مرحباً، ${currentUser.name} 👋</h1>
+              <p class="text-sm text-[#6E6E73] mt-1">استكشف الكورسات التعليمية، تابع محاضراتك، واجتز الاختبارات لفتح المحتوى المتقدم</p>
+            </div>
+
+            <div class="segmented-bg inline-flex gap-1">
+              <button onclick="studentTab='catalog'; renderStudentDashboard();" class="px-4 py-2 rounded-xl text-xs font-bold transition ${studentTab==='catalog' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73]'}">الكورسات التعليمية</button>
+              <button onclick="studentTab='grades'; renderStudentDashboard();" class="px-4 py-2 rounded-xl text-xs font-bold transition ${studentTab==='grades' ? 'bg-white text-[#1D1D1F] shadow-sm' : 'text-[#6E6E73]'}">نتائج الامتحانات والأداء</button>
+            </div>
+          </div>
+
+          ${mainSection}
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function enrollFreeCourse(courseId) {
+      if (isStudentEnrolled(courseId)) return;
+      db.enrollments.push({
+        userId: currentUser.id,
+        courseId,
+        enrolledAt: new Date().toISOString().slice(0, 10),
+        method: 'free',
+        completedLectures: []
+      });
+      saveDB();
+      showToast('تم اشتراكك في الكورس المجاني بنجاح!', 'success');
+      enterCoursePlayer(courseId);
+    }
+
+    function openRedeemCodeModal(targetCourseId = '') {
+      openModal(`
+        <div class="p-6">
+          <div class="flex items-center justify-between pb-4 border-b border-black/5">
+            <h3 class="font-display font-bold text-lg">تفعيل كود اشتراك</h3>
+            <button onclick="closeModal()" class="p-1.5 rounded-lg hover:bg-black/5"><i data-lucide="x" class="w-5 h-5"></i></button>
+          </div>
+          <form onsubmit="submitRedeemCode(event, '${targetCourseId}')" class="space-y-4 mt-4">
+            <p class="text-xs text-[#6E6E73] leading-relaxed">
+              أدخل كود الاشتراك المكون من أحرف وأرقام لفتح الكورس المرتبط به فورًا على حسابك.
+            </p>
+            <div>
+              <label class="block text-xs font-semibold mb-1.5">كود التفعيل</label>
+              <input type="text" id="redeem-code-input" required placeholder="مثال: OFOQ-2026-PRO"
+                class="w-full px-4 py-3 rounded-xl bg-[#F5F5F7] text-center font-mono font-bold text-base uppercase tracking-wider outline-none focus:border-[#0071E3] border border-transparent" />
+              <p class="text-[11px] text-[#6E6E73] mt-2">أكواد تجريبية متاحة للتجربة: <code class="bg-black/5 px-1.5 py-0.5 rounded font-bold text-[#1D1D1F]">OFOQ-2026-PRO</code> أو <code class="bg-black/5 px-1.5 py-0.5 rounded font-bold text-[#1D1D1F]">OFOQ-PHYS-88</code></p>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-[#F5F5F7] text-xs font-bold">إلغاء</button>
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#0071E3] text-white text-xs font-bold">تفعيل الكود الآن</button>
+            </div>
+          </form>
+        </div>
+      `);
+    }
+
+    function submitRedeemCode(e, targetCourseId) {
+      e.preventDefault();
+      const inputCode = document.getElementById('redeem-code-input').value.trim().toUpperCase();
+      const codeObj = db.subscriptionCodes.find(sc => sc.code.toUpperCase() === inputCode);
+
+      if (!codeObj) {
+        showToast('كود الاشتراك غير صحيح. يرجى التأكد من كتابته بشكل سليم.', 'error');
+        return;
+      }
+      if (codeObj.used) {
+        showToast('عذراً، هذا الكود تم استخدامه مسبقًا!', 'error');
+        return;
+      }
+      if (targetCourseId && codeObj.courseId !== targetCourseId) {
+        const actualCourse = db.courses.find(c => c.id === codeObj.courseId);
+        showToast(`هذا الكود مخصص لكورس آخر: ${actualCourse ? actualCourse.title : ''}`, 'error');
+        return;
+      }
+
+      // Mark code as redeemed
+      codeObj.used = true;
+      codeObj.usedByUserId = currentUser.id;
+      codeObj.usedAt = new Date().toLocaleString('ar-EG');
+
+      if (!isStudentEnrolled(codeObj.courseId)) {
+        db.enrollments.push({
+          userId: currentUser.id,
+          courseId: codeObj.courseId,
+          enrolledAt: new Date().toISOString().slice(0, 10),
+          method: `code: ${codeObj.code}`,
+          completedLectures: []
+        });
+      }
+
+      saveDB();
+      closeModal();
+      showToast('تم تفعيل الكود وفتح الكورس بنجاح!', 'success');
+      enterCoursePlayer(codeObj.courseId);
+    }
+
+    function enterCoursePlayer(courseId) {
+      const course = db.courses.find(c => c.id === courseId);
+      if (!course) return;
+      activeCourseId = courseId;
+      activeLectureId = course.lectures.length > 0 ? course.lectures[0].id : null;
+      activeExamMode = false;
+      studentTab = 'player';
+      renderStudentCoursePlayer();
+    }
+
+    // =========================================================================
+    // 7. EMBEDDED PROTECTED VIDEO PLAYER & EXAM ENGINE
+    // =========================================================================
+    function renderStudentCoursePlayer() {
+      const app = document.getElementById('app-container');
+      const course = db.courses.find(c => c.id === activeCourseId);
+      if (!course) {
+        studentTab = 'catalog';
+        renderStudentDashboard();
+        return;
+      }
+
+      const lecIndex = course.lectures.findIndex(l => l.id === activeLectureId);
+      const currentLecture = lecIndex >= 0 ? course.lectures[lecIndex] : null;
+      const enrollment = getStudentEnrollment(course.id);
+
+      // Check if previous exam passed for current lecture
+      const prevExamPassed = currentLecture && currentLecture.exam
+        ? db.examSubmissions.some(s => s.userId === currentUser.id && s.lectureId === currentLecture.id && s.passed)
+        : false;
+
+      app.innerHTML = `
+        <div class="animate-view">
+          <!-- Top Breadcrumb Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+            <button onclick="isPiP=false; studentTab='catalog'; renderStudentDashboard();" class="inline-flex items-center gap-2 text-sm font-bold text-[#0071E3] hover:underline">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              العودة إلى لوحة الطالب
+            </button>
+            <div class="text-xs font-semibold text-[#6E6E73]">
+              ${course.title}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Main Video & Exam Workspace (8 Columns) -->
+            <div class="lg:col-span-8 space-y-5">
+              ${!currentLecture ? `
+                <div class="apple-card p-10 text-center text-sm text-[#6E6E73]">
+                  لا توجد محاضرات متاحة في هذا الكورس بعد.
+                </div>
+              ` : activeExamMode && currentLecture.exam ? renderInteractiveExamBox(course, currentLecture) : `
+                <!-- Protected Custom Video Player Wrapper -->
+                <div id="player-wrapper" oncontextmenu="return false;" class="relative rounded-[22px] overflow-hidden bg-black shadow-apple select-none group ${isPiP ? 'pip-active' : ''}">
+                  <!-- Dynamic User Security Watermark -->
+                  <div class="video-watermark absolute z-20 px-3 py-1 rounded-lg bg-black/35 backdrop-blur-sm text-white/60 text-[11px] font-mono">
+                    ID: ${currentUser.email} • محمي
+                  </div>
+
+                  <!-- HTML5 Video Element -->
+                  <video id="custom-video" class="w-full aspect-video object-contain bg-black cursor-pointer"
+                    onclick="togglePlayPause()"
+                    ontimeupdate="updateVideoProgress()"
+                    onloadedmetadata="initVideoMetadata()"
+                    onended="handleVideoEnded('${course.id}', '${currentLecture.id}')"
+                    controlsList="nodownload noplaybackrate" disablePictureInPicture>
+                    <source src="${currentLecture.videoUrl}" type="video/mp4" />
+                    متصفحك لا يدعم تشغيل الفيديو.
+                  </video>
+
+                  <!-- Apple-Style Custom Controls Overlay -->
+                  <div class="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-8 pb-3 px-4 text-white">
+                    <!-- Timeline Scrubber with Chapters & Moments Pins -->
+                    <div class="relative mb-2.5 flex items-center">
+                      <input type="range" id="video-seek-bar" min="0" max="100" value="0" step="0.1"
+                        oninput="seekVideoToPercent(this.value)"
+                        class="apple-slider w-full z-10" />
+                      <div id="timeline-markers" class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1.5 pointer-events-none"></div>
+                    </div>
+
+                    <!-- Control Buttons Row -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                      <div class="flex items-center gap-2 sm:gap-3">
+                        <!-- Play/Pause -->
+                        <button onclick="togglePlayPause()" class="p-2 rounded-xl bg-white/15 hover:bg-white/25 transition" title="تشغيل / إيقاف">
+                          <i id="play-pause-icon" data-lucide="play" class="w-4 h-4"></i>
+                        </button>
+
+                        <!-- Rewind 10s -->
+                        <button onclick="skipVideo(-10)" class="p-2 rounded-xl hover:bg-white/15 transition flex items-center gap-1" title="تأخير 10 ثوانٍ">
+                          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                          <span class="hidden sm:inline text-[11px]">-10ث</span>
+                        </button>
+
+                        <!-- Forward 10s -->
+                        <button onclick="skipVideo(10)" class="p-2 rounded-xl hover:bg-white/15 transition flex items-center gap-1" title="تقديم 10 ثوانٍ">
+                          <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                          <span class="hidden sm:inline text-[11px]">+10ث</span>
+                        </button>
+
+                        <!-- Volume & Mute -->
+                        <div class="flex items-center gap-1.5">
+                          <button onclick="toggleMuteVideo()" class="p-1.5 rounded-lg hover:bg-white/15 transition">
+                            <i id="mute-icon" data-lucide="volume-2" class="w-4 h-4"></i>
+                          </button>
+                          <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1"
+                            oninput="changeVideoVolume(this.value)"
+                            class="apple-slider w-14 sm:w-20 hidden sm:block" />
+                        </div>
+
+                        <!-- Time Display -->
+                        <span id="video-time-display" class="font-mono text-[11px] text-white/80">00:00 / 00:00</span>
+                      </div>
+
+                      <div class="flex items-center gap-1.5 sm:gap-2">
+                        <!-- Playback Speed -->
+                        <select id="speed-select" onchange="changeVideoSpeed(this.value)" class="bg-white/15 hover:bg-white/25 text-white rounded-lg px-2 py-1 text-[11px] font-bold outline-none cursor-pointer">
+                          <option value="0.75" class="text-black">0.75x</option>
+                          <option value="1" selected class="text-black">1.0x</option>
+                          <option value="1.25" class="text-black">1.25x</option>
+                          <option value="1.5" class="text-black">1.5x</option>
+                          <option value="2" class="text-black">2.0x</option>
+                        </select>
+
+                        <!-- Quality Selector -->
+                        <select onchange="changeVideoQuality(this.value)" class="bg-white/15 hover:bg-white/25 text-white rounded-lg px-2 py-1 text-[11px] font-bold outline-none cursor-pointer">
+                          <option value="1080p" selected class="text-black">1080p HD</option>
+                          <option value="720p" class="text-black">720p</option>
+                          <option value="480p" class="text-black">480p</option>
+                        </select>
+
+                        <!-- Floating Mini-Player (PiP) -->
+                        <button onclick="toggleFloatingPlayer()" class="p-2 rounded-xl hover:bg-white/15 transition" title="النافذة العائمة">
+                          <i data-lucide="picture-in-picture-2" class="w-4 h-4"></i>
+                        </button>
+
+                        <!-- Fullscreen -->
+                        <button onclick="toggleVideoFullscreen()" class="p-2 rounded-xl hover:bg-white/15 transition" title="ملء الشاشة">
+                          <i data-lucide="maximize" class="w-4 h-4"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Chapters & Moments Interactive Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="apple-card p-4">
+                    <h4 class="font-display font-bold text-sm text-[#1D1D1F] mb-2.5 flex items-center gap-2">
+                      <i data-lucide="list-video" class="w-4 h-4 text-[#0071E3]"></i>
+                      فصول المحاضرة (Chapters)
+                    </h4>
+                    <div class="space-y-1.5">
+                      ${(currentLecture.chapters || []).map(ch => `
+                        <button onclick="seekVideoToSeconds(${ch.time})" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-[#F5F5F7] hover:bg-blue-50 hover:text-[#0071E3] text-xs font-medium transition text-right">
+                          <span>${ch.title}</span>
+                          <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-white text-[#6E6E73]">${formatSeconds(ch.time)}</span>
+                        </button>
+                      `).join('')}
+                    </div>
+                  </div>
+
+                  <div class="apple-card p-4">
+                    <h4 class="font-display font-bold text-sm text-[#1D1D1F] mb-2.5 flex items-center gap-2">
+                      <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+                      أهم اللحظات (Key Moments)
+                    </h4>
+                    <div class="space-y-1.5">
+                      ${(currentLecture.moments || []).map(m => `
+                        <button onclick="seekVideoToSeconds(${m.time})" class="w-full flex items-center justify-between p-2.5 rounded-xl bg-amber-50/70 hover:bg-amber-100/80 text-amber-950 text-xs font-medium transition text-right">
+                          <span>${m.label}</span>
+                          <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-white text-amber-700">${formatSeconds(m.time)}</span>
+                        </button>
+                      `).join('')}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Lecture Details, PDF Material & Exam CTA -->
+                <div class="apple-card p-6 space-y-4">
+                  <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <span class="text-xs font-bold text-[#0071E3]">${currentLecture.unit}</span>
+                      <h2 class="font-display font-extrabold text-xl text-[#1D1D1F] mt-1">${currentLecture.title}</h2>
+                    </div>
+
+                    ${currentLecture.pdfName ? `
+                      <button onclick="downloadLecturePDF('${currentLecture.pdfName}', '${currentLecture.title}')" class="px-4 py-2.5 rounded-xl bg-[#F5F5F7] hover:bg-blue-50 text-[#1D1D1F] hover:text-[#0071E3] text-xs font-bold flex items-center gap-2 transition">
+                        <i data-lucide="file-down" class="w-4 h-4 text-rose-500"></i>
+                        تحميل ملخص PDF (${currentLecture.pdfName})
+                      </button>
+                    ` : ''}
+                  </div>
+
+                  <p class="text-sm text-[#6E6E73] leading-relaxed">${currentLecture.notes}</p>
+
+                  <!-- Exam Callout Box -->
+                  ${currentLecture.exam ? `
+                    <div class="p-5 rounded-2xl bg-gradient-to-l from-blue-50 to-indigo-50/60 border border-blue-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <span class="font-display font-bold text-base text-[#1D1D1F]">${currentLecture.exam.title}</span>
+                          ${prevExamPassed ? `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500 text-white">مُجتاز ✓</span>` : ''}
+                        </div>
+                        <p class="text-xs text-[#6E6E73] mt-1">
+                          درجة النجاح المطلوبة: <strong>${currentLecture.exam.passScore}%</strong>
+                          ${currentLecture.exam.requirePassToUnlockNext ? ' • اجتياز هذا الامتحان يفتح المحاضرة التالية تلقائياً' : ''}
+                        </p>
+                      </div>
+                      <button onclick="activeExamMode=true; renderStudentCoursePlayer();" class="px-5 py-3 rounded-xl bg-[#0071E3] hover:bg-[#0077ED] text-white text-xs font-bold shadow-sm transition shrink-0">
+                        ${prevExamPassed ? 'إعادة الامتحان' : 'بدء الامتحان الآن'}
+                      </button>
+                    </div>
+                  ` : ''}
+                </div>
+              `}
+            </div>
+
+            <!-- Curriculum Sidebar (4 Columns) -->
+            <div class="lg:col-span-4">
+              <div class="apple-card p-5 sticky top-24">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-black/5">
+                  <h3 class="font-display font-bold text-base">محتوى الكورس والمحاضرات</h3>
+                  <span class="text-xs font-bold text-[#6E6E73]">${course.lectures.length} محاضرات</span>
+                </div>
+
+                <div class="space-y-2.5">
+                  ${course.lectures.map((lec, idx) => {
+                    const unlocked = isLectureUnlocked(course, idx);
+                    const isActive = currentLecture && lec.id === currentLecture.id;
+                    const isDone = enrollment && enrollment.completedLectures.includes(lec.id);
+
+                    return `
+                      <button
+                        onclick="${unlocked ? `activeLectureId='${lec.id}'; activeExamMode=false; renderStudentCoursePlayer();` : `showToast('هذه المحاضرة مغلقة! يجب اجتياز امتحان المحاضرة السابقة أولاً.', 'error');`}"
+                        class="w-full p-3.5 rounded-2xl text-right transition flex items-start gap-3 border ${
+                          isActive
+                            ? 'bg-blue-50/80 border-[#0071E3]/40'
+                            : unlocked
+                              ? 'bg-[#F5F5F7] hover:bg-gray-200/70 border-transparent'
+                              : 'bg-gray-100/70 opacity-65 border-transparent cursor-not-allowed'
+                        }">
+                        <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
+                          !unlocked
+                            ? 'bg-gray-200 text-gray-500'
+                            : isDone
+                              ? 'bg-emerald-500 text-white'
+                              : isActive
+                                ? 'bg-[#0071E3] text-white'
+                                : 'bg-white text-[#1D1D1F]'
+                        }">
+                          ${!unlocked
+                            ? '<i data-lucide="lock" class="w-4 h-4"></i>'
+                            : isDone
+                              ? '<i data-lucide="check" class="w-4 h-4"></i>'
+                              : '<i data-lucide="play" class="w-3.5 h-3.5"></i>'
+                          }
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <div class="text-[11px] text-[#6E6E73] font-medium">${lec.unit}</div>
+                          <div class="text-xs font-bold text-[#1D1D1F] mt-0.5 line-clamp-2">${lec.title}</div>
+                          <div class="flex items-center gap-2 mt-1.5 text-[11px] text-[#6E6E73]">
+                            <span>${lec.duration}</span>
+                            ${lec.exam ? `<span class="text-[#0071E3] font-semibold">• يتضمن امتحان</span>` : ''}
+                          </div>
+                        </div>
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    // Video Player Control Functions
+    function formatSeconds(sec) {
+      const s = Math.floor(sec || 0);
+      const mins = Math.floor(s / 60);
+      const rem = s % 60;
+      return `${String(mins).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+    }
+
+    function initVideoMetadata() {
+      const video = document.getElementById('custom-video');
+      if (!video) return;
+      updateVideoProgress();
+      renderTimelineMarkers();
+    }
+
+    function renderTimelineMarkers() {
+      const video = document.getElementById('custom-video');
+      const markersBox = document.getElementById('timeline-markers');
+      const course = db.courses.find(c => c.id === activeCourseId);
+      const lec = course ? course.lectures.find(l => l.id === activeLectureId) : null;
+      if (!video || !markersBox || !lec || !video.duration) return;
+
+      const dur = video.duration;
+      const chapterPins = (lec.chapters || []).map(ch => {
+        const pct = Math.min(98, Math.max(0, (ch.time / dur) * 100));
+        return `<span style="right: ${pct}%" class="absolute w-1.5 h-2.5 bg-sky-400 rounded-full -top-0.5" title="${ch.title}"></span>`;
+      }).join('');
+
+      const momentPins = (lec.moments || []).map(m => {
+        const pct = Math.min(98, Math.max(0, (m.time / dur) * 100));
+        return `<span style="right: ${pct}%" class="absolute w-2 h-2 bg-amber-400 rotate-45 -top-0.5" title="${m.label}"></span>`;
+      }).join('');
+
+      markersBox.innerHTML = chapterPins + momentPins;
+    }
+
+    function togglePlayPause() {
+      const video = document.getElementById('custom-video');
+      const icon = document.getElementById('play-pause-icon');
+      if (!video) return;
+      if (video.paused) {
+        video.play();
+        icon.setAttribute('data-lucide', 'pause');
+      } else {
+        video.pause();
+        icon.setAttribute('data-lucide', 'play');
+      }
+      lucide.createIcons();
+    }
+
+    function skipVideo(delta) {
+      const video = document.getElementById('custom-video');
+      if (!video) return;
+      video.currentTime = Math.max(0, Math.min(video.duration || 0, video.currentTime + delta));
+    }
+
+    function seekVideoToPercent(pct) {
+      const video = document.getElementById('custom-video');
+      if (!video || !video.duration) return;
+      video.currentTime = (pct / 100) * video.duration;
+    }
+
+    function seekVideoToSeconds(sec) {
+      const video = document.getElementById('custom-video');
+      if (!video) return;
+      video.currentTime = sec;
+      video.play();
+      const icon = document.getElementById('play-pause-icon');
+      if (icon) {
+        icon.setAttribute('data-lucide', 'pause');
+        lucide.createIcons();
+      }
+    }
+
+    function updateVideoProgress() {
+      const video = document.getElementById('custom-video');
+      const seekBar = document.getElementById('video-seek-bar');
+      const timeDisplay = document.getElementById('video-time-display');
+      if (!video || !seekBar || !timeDisplay) return;
+
+      const dur = video.duration || 0;
+      const cur = video.currentTime || 0;
+      const pct = dur > 0 ? (cur / dur) * 100 : 0;
+      seekBar.value = pct;
+      seekBar.style.background = `linear-gradient(to left, #0071E3 ${pct}%, rgba(255,255,255,0.28) ${pct}%)`;
+      timeDisplay.textContent = `${formatSeconds(cur)} / ${formatSeconds(dur)}`;
+    }
+
+    function changeVideoVolume(val) {
+      const video = document.getElementById('custom-video');
+      if (!video) return;
+      video.volume = val;
+      video.muted = Number(val) === 0;
+    }
+
+    function toggleMuteVideo() {
+      const video = document.getElementById('custom-video');
+      const icon = document.getElementById('mute-icon');
+      if (!video) return;
+      video.muted = !video.muted;
+      icon.setAttribute('data-lucide', video.muted ? 'volume-x' : 'volume-2');
+      lucide.createIcons();
+    }
+
+    function changeVideoSpeed(rate) {
+      const video = document.getElementById('custom-video');
+      if (!video) return;
+      video.playbackRate = parseFloat(rate);
+      showToast(`سرعة التشغيل: ${rate}x`, 'info');
+    }
+
+    function changeVideoQuality(q) {
+      showToast(`تم ضبط جودة البث على ${q}`, 'info');
+    }
+
+    function toggleFloatingPlayer() {
+      isPiP = !isPiP;
+      const wrapper = document.getElementById('player-wrapper');
+      if (wrapper) {
+        wrapper.classList.toggle('pip-active', isPiP);
+        showToast(isPiP ? 'تم تفعيل وضع النافذة العائمة' : 'تمت استعادة حجم المشغل الطبيعي', 'info');
+      }
+    }
+
+    function toggleVideoFullscreen() {
+      const wrapper = document.getElementById('player-wrapper');
+      if (!wrapper) return;
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    function handleVideoEnded(courseId, lectureId) {
+      const enrollment = getStudentEnrollment(courseId);
+      if (enrollment && !enrollment.completedLectures.includes(lectureId)) {
+        enrollment.completedLectures.push(lectureId);
+        saveDB();
+        showToast('أحسنت! أتممت مشاهدة المحاضرة بنجاح.', 'success');
+      }
+    }
+
+    function downloadLecturePDF(filename, lectureTitle) {
+      const content = `منصة أُفُق التعليمية\nملخص المحاضرة: ${lectureTitle}\nاسم الملف: ${filename}\nتاريخ التحميل: ${new Date().toLocaleDateString('ar-EG')}`;
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename.replace('.pdf', '.txt');
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`جاري تحميل المادة التعليمية: ${filename}`, 'success');
+    }
+
+    // Interactive Exam Rendering & Auto-Grading
+    function renderInteractiveExamBox(course, lecture) {
+      const exam = lecture.exam;
+      return `
+        <div class="apple-card p-6 sm:p-8 animate-view">
+          <div class="flex items-center justify-between pb-4 mb-6 border-b border-black/5">
+            <div>
+              <span class="px-2.5 py-1 rounded-lg bg-blue-50 text-[#0071E3] text-xs font-bold">تقييم المحاضرة</span>
+              <h2 class="font-display font-extrabold text-xl text-[#1D1D1F] mt-1.5">${exam.title}</h2>
+              <p class="text-xs text-[#6E6E73] mt-0.5">درجة الاجتياز المطلوبة: ${exam.passScore}%</p>
+            </div>
+            <button onclick="activeExamMode=false; renderStudentCoursePlayer();" class="px-3.5 py-2 rounded-xl bg-[#F5F5F7] text-xs font-bold">
+              العودة للفيديو
+            </button>
+          </div>
+
+          <form onsubmit="submitStudentExam(event, '${course.id}', '${lecture.id}')" class="space-y-6">
+            ${exam.questions.map((q, idx) => `
+              <div class="p-5 rounded-2xl bg-[#F5F5F7] space-y-3">
+                <div class="font-bold text-sm text-[#1D1D1F]">
+                  <span class="text-[#0071E3] ml-1">${idx + 1}.</span> ${q.text}
+                </div>
+                ${q.type === 'mcq' ? `
+                  <div class="space-y-2">
+                    ${q.options.map((opt, optIdx) => `
+                      <label class="flex items-center gap-3 p-3 rounded-xl bg-white hover:bg-blue-50/60 cursor-pointer border border-transparent has-[:checked]:border-[#0071E3] transition text-xs font-medium">
+                        <input type="radio" name="ans-${q.id}" value="${optIdx}" required class="w-4 h-4 accent-[#0071E3]" />
+                        <span>${opt}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                ` : `
+                  <textarea id="essay-ans-${q.id}" rows="3" required placeholder="اكتب إجابتك المقالية بوضوح هنا..."
+                    class="w-full p-3.5 rounded-xl bg-white text-sm outline-none focus:border-[#0071E3] border border-transparent"></textarea>
+                `}
+              </div>
+            `).join('')}
+
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-[#34C759] hover:opacity-95 text-white font-bold text-sm shadow-sm transition">
+              تسليم الإجابات وعرض النتيجة الفورية
+            </button>
+          </form>
+        </div>
+      `;
+    }
+
+    function submitStudentExam(e, courseId, lectureId) {
+      e.preventDefault();
+      const course = db.courses.find(c => c.id === courseId);
+      const lecture = course.lectures.find(l => l.id === lectureId);
+      const exam = lecture.exam;
+
+      const mcqQuestions = exam.questions.filter(q => q.type === 'mcq');
+      const essayQuestions = exam.questions.filter(q => q.type === 'essay');
+
+      let correctMcq = 0;
+      mcqQuestions.forEach(q => {
+        const selected = document.querySelector(`input[name="ans-${q.id}"]:checked`);
+        if (selected && parseInt(selected.value, 10) === q.correctIndex) {
+          correctMcq++;
+        }
+      });
+
+      const mcqScore = mcqQuestions.length > 0 ? Math.round((correctMcq / mcqQuestions.length) * 100) : 100;
+
+      const essayAnswers = essayQuestions.map(q => ({
+        questionId: q.id,
+        questionText: q.text,
+        studentAnswer: document.getElementById(`essay-ans-${q.id}`)?.value.trim() || '',
+        teacherGrade: null,
+        graded: false
+      }));
+
+      const passed = mcqScore >= exam.passScore;
+
+      // Save submission
+      db.examSubmissions.unshift({
+        id: 'sub-' + Date.now(),
+        userId: currentUser.id,
+        courseId,
+        lectureId,
+        examId: exam.id,
+        mcqScore,
+        totalScore: mcqScore,
+        passed,
+        essayAnswers,
+        submittedAt: new Date().toLocaleString('ar-EG')
+      });
+
+      // Mark lecture completed if passed
+      const enrollment = getStudentEnrollment(courseId);
+      if (passed && enrollment && !enrollment.completedLectures.includes(lectureId)) {
+        enrollment.completedLectures.push(lectureId);
+      }
+
+      saveDB();
+      activeExamMode = false;
+
+      // Show Instant Result Modal
+      openModal(`
+        <div class="p-7 text-center">
+          <div class="w-16 h-16 mx-auto rounded-full ${passed ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'} flex items-center justify-center mb-4">
+            <i data-lucide="${passed ? 'award' : 'x-circle'}" class="w-9 h-9"></i>
+          </div>
+          <h3 class="font-display font-extrabold text-2xl text-[#1D1D1F]">
+            ${passed ? 'تهانينا! لقد اجتزت الامتحان بنجاح' : 'لم تحقق درجة الاجتياز المطلوبة'}
+          </h3>
+          <div class="text-4xl font-display font-extrabold my-3 ${passed ? 'text-emerald-600' : 'text-rose-600'}">
+            ${mcqScore}%
+          </div>
+          <p class="text-xs text-[#6E6E73] max-w-md mx-auto leading-relaxed">
+            ${passed
+              ? 'تم تسجيل نتيجتك وفتح المحاضرة التالية في الكورس تلقائياً!'
+              : `درجة الاجتياز المطلوبة هي ${exam.passScore}%. يمكنك مراجعة المحاضرة وإعادة المحاولة.`
+            }
+            ${essayAnswers.length > 0 ? '<br>تم إرسال إجاباتك المقالية إلى المدرس للمراجعة والتقييم.' : ''}
+          </p>
+          <button onclick="closeModal(); renderStudentCoursePlayer();" class="mt-6 px-6 py-3 rounded-xl bg-[#0071E3] text-white text-xs font-bold">
+            متابعة التعلم
+          </button>
+        </div>
+      `);
+    }
+
+    // =========================================================================
+    // 8. MAIN APPLICATION ROUTER & INITIALIZATION
+    // =========================================================================
+    function renderApp() {
+      if (!currentUser) {
+        renderAuthScreen();
+        return;
+      }
+
+      // Update Header
+      const header = document.getElementById('main-header');
+      header.classList.remove('hidden');
+
+      const roleBadges = {
+        admin: 'لوحة الإدارة',
+        teacher: 'حساب مدرس',
+        student: 'حساب طالب'
+      };
+
+      document.getElementById('header-role-badge').textContent = roleBadges[currentUser.role] || '';
+      document.getElementById('header-user-name').textContent = currentUser.name;
+      document.getElementById('header-user-email').textContent = currentUser.email;
+      document.getElementById('header-user-avatar').textContent = currentUser.name.charAt(0);
+
+      // Highlight Quick Switcher button
+      ['admin', 'teacher', 'student'].forEach(r => {
+        const btn = document.getElementById('qs-' + r);
+        if (btn) {
+          btn.classList.toggle('ring-2', currentUser.role === r);
+          btn.classList.toggle('ring-white/60', currentUser.role === r);
+        }
+      });
+
+      if (currentUser.role === 'admin') {
+        renderAdminDashboard();
+      } else if (currentUser.role === 'teacher') {
+        renderTeacherDashboard();
+      } else {
+        renderStudentDashboard();
+      }
+    }
+
+    // Boot Application
+    window.addEventListener('DOMContentLoaded', () => {
+      renderApp();
+    });
+  </script>
+</body>
+</html>
